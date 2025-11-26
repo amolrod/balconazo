@@ -306,3 +306,120 @@ Reconstruir:
 * **Prevención**:
 
   * Mantener coherencia entre nombres en `docker-compose.yml` y configuración de apps.
+
+---
+
+## **10. Problemas resueltos en desarrollo (26/11/2025)**
+
+### **Problema 16: Flyway - versión no especificada**
+
+* **Síntoma**: `Cannot find artifact 'org.flywaydb:flyway-database-postgresql:jar:${flyway.version}'`
+
+* **Causa**: Falta la propiedad `flyway.version` en `pom.xml`.
+
+* **Solución**:
+  ```xml
+  <properties>
+      <java.version>21</java.version>
+      <flyway.version>10.0.0</flyway.version>
+  </properties>
+  ```
+
+* **Prevención**: Siempre definir versiones explícitas para dependencias que usan variables.
+
+---
+
+### **Problema 17: función `lower(bytea)` no existe en PostgreSQL**
+
+* **Síntoma**: `ERROR: function lower(bytea) does not exist`
+
+* **Causa**: Consultas JPQL con parámetros NULL en Hibernate 6+ causan problemas de tipado.
+
+* **Solución**: Usar JPA Specifications en lugar de @Query con parámetros opcionales:
+  ```java
+  public class SpaceSpecification {
+      public static Specification<Space> withFilters(SpaceFilter filter) {
+          return (root, query, cb) -> {
+              List<Predicate> predicates = new ArrayList<>();
+              if (filter.getCity() != null && !filter.getCity().isBlank()) {
+                  predicates.add(cb.like(cb.lower(root.get("city")), 
+                      "%" + filter.getCity().toLowerCase() + "%"));
+              }
+              return cb.and(predicates.toArray(new Predicate[0]));
+          };
+      }
+  }
+  ```
+
+* **Prevención**: Evitar `@Query` con muchos parámetros opcionales; usar Specifications.
+
+---
+
+### **Problema 18: Keycloak requiere HTTPS**
+
+* **Síntoma**: `{"error": "invalid_request", "error_description": "HTTPS required"}`
+
+* **Causa**: Keycloak por defecto requiere HTTPS para endpoints de autenticación.
+
+* **Solución**: Deshabilitar SSL para desarrollo:
+  ```bash
+  docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh config credentials \
+    --server http://localhost:8080 --realm master --user admin --password admin
+  
+  docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh update realms/balconazo \
+    -s sslRequired=NONE
+  ```
+
+  O en `realm-export.json`: `"sslRequired": "none"`
+
+* **Prevención**: Configurar `sslRequired` correctamente en el export del realm.
+
+---
+
+### **Problema 19: JWT Issuer Mismatch**
+
+* **Síntoma**: `The iss claim is not valid` / `Failed to authenticate since the JWT was invalid`
+
+* **Causa**: Token generado con issuer `http://localhost:8081/realms/balconazo` pero el microservicio espera `http://keycloak:8080/realms/balconazo`.
+
+* **Solución**: Configurar dos URLs diferentes en `docker-compose.yml`:
+  ```yaml
+  environment:
+    # Issuer que aparece en el token (acceso externo)
+    SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8081/realms/balconazo
+    # URL para obtener claves JWK (red Docker interna)
+    SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs
+  ```
+
+* **Prevención**: Siempre separar el issuer (externo) del JWK set URI (interno).
+
+---
+
+### **Problema 20: Duplicate key - email único**
+
+* **Síntoma**: `ERROR: duplicate key value violates unique constraint "users_email_key"`
+
+* **Causa**: Cuando el token no incluye email, se usaba un email por defecto para todos los usuarios.
+
+* **Solución**: Usar keycloakId como parte del email fallback:
+  ```java
+  // Antes
+  String userEmail = email != null ? email : "unknown@balconazo.local";
+  
+  // Después
+  String userEmail = email != null ? email : keycloakId + "@balconazo.local";
+  ```
+
+* **Prevención**: Nunca usar valores fijos para campos únicos.
+
+---
+
+### **Problema 21: KrakenD endpoint `/__health` inválido**
+
+* **Síntoma**: `ERROR parsing the configuration file: ignoring the 'GET /__health' endpoint`
+
+* **Causa**: El endpoint estaba mal configurado, apuntando a sí mismo como backend.
+
+* **Solución**: Eliminar el endpoint personalizado de health y usar el interno de KrakenD.
+
+* **Prevención**: No crear endpoints que apunten al propio gateway como backend.

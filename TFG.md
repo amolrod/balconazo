@@ -1,304 +1,349 @@
-# 📚 Trabajo de Fin de Grado: BalconazoApp
+# 📓 Diario de Desarrollo - TFG BalconazoApp
 
-## Registro de Desarrollo del Proyecto
-
+**Proyecto:** BalconazoApp - Marketplace de alquiler de espacios por horas  
 **Autor:** Ángel Molina Rodríguez  
-**Repositorio:** https://github.com/amolrod/balconazo  
-**Fecha de Inicio:** 26 de Noviembre de 2025  
-**Estado:** En desarrollo
+**Repositorio:** [github.com/amolrod/balconazo](https://github.com/amolrod/balconazo)
 
 ---
 
-## 📋 Índice
+## Sesión 1 - 26 de Noviembre de 2025
 
-1. [Descripción del Proyecto](#descripción-del-proyecto)
-2. [Stack Tecnológico](#stack-tecnológico)
-3. [Arquitectura del Sistema](#arquitectura-del-sistema)
-4. [Registro de Desarrollo](#registro-de-desarrollo)
-5. [Estado Actual](#estado-actual)
-6. [Próximos Pasos](#próximos-pasos)
+### 1. Análisis Inicial del Proyecto
 
----
+Comencé analizando toda la documentación existente en el repositorio. El proyecto estaba al **0% de implementación** - solo existía documentación y estructura de carpetas vacías.
 
-## 📖 Descripción del Proyecto
+**Documentos revisados:**
+- PROJECT_SETUP.md
+- BACKEND_DEVELOPMENT_GUIDE.md
+- FRONTEND_DEVELOPMENT_GUIDE.md
+- DATABASE_SCHEMAS.md
+- KEYCLOAK_CONFIG.md
+- KRAKEND_CONFIG.md
 
-**BalconazoApp** es un marketplace digital para el alquiler por horas de espacios con vistas privilegiadas (balcones, terrazas, azoteas) para eventos especiales como procesiones de Semana Santa, fuegos artificiales, desfiles o cualquier evento urbano.
-
-### Problema que Resuelve
-- Los propietarios de espacios con vistas privilegiadas no tienen una plataforma para rentabilizar sus espacios de forma puntual
-- Los usuarios que buscan vistas privilegiadas para eventos especiales no tienen acceso fácil a estos espacios
-- No existe una solución digital que conecte oferta y demanda de forma segura y eficiente
-
-### Propuesta de Valor
-- Marketplace bidireccional (anfitriones y huéspedes)
-- Sistema de reservas por horas
-- Gestión de pagos segura
-- Sistema de valoraciones y reseñas
-- Verificación de espacios
+**Conclusión del análisis:** El proyecto tenía una planificación muy detallada pero ningún código implementado.
 
 ---
 
-## 🛠 Stack Tecnológico
+### 2. Scaffolding Completo del Proyecto
 
-### Backend
-| Tecnología | Versión | Propósito |
-|------------|---------|-----------|
-| Java | 21 LTS | Lenguaje principal |
-| Spring Boot | 3.2.0 | Framework de microservicios |
-| PostgreSQL | 16-alpine | Base de datos relacional |
-| Flyway | 10.0.0 | Migraciones de BD |
-| Keycloak | 22.0 | Autenticación y autorización |
-| KrakenD | 2.4 | API Gateway |
+Creé toda la estructura del proyecto desde cero:
 
-### Frontend (Pendiente)
-| Tecnología | Versión | Propósito |
-|------------|---------|-----------|
-| Next.js | 15.0.3 | Framework React |
-| React | 19 | Librería UI |
-| TypeScript | 5 | Tipado estático |
-| Tailwind CSS | 3.4 | Estilos |
-| Bun | 1.x | Runtime y gestor de paquetes |
+**Backend (Java 21 + Spring Boot 3.2.0):**
+- `users-service` - Gestión de usuarios
+- `spaces-service` - Gestión de espacios
+- `bookings-service` - Gestión de reservas
 
-### DevOps
-| Tecnología | Propósito |
-|------------|-----------|
-| Docker Compose | Orquestación local |
-| GitHub Actions | CI/CD |
+Cada microservicio incluye:
+- Entidades JPA
+- Repositorios
+- Servicios
+- Controladores REST
+- DTOs
+- Configuración de seguridad OAuth2
+- Migraciones Flyway
 
----
+**Frontend (Next.js 15 + React 19):**
+- Estructura de páginas
+- Componentes base
+- Configuración de Tailwind CSS
 
-## 🏗 Arquitectura del Sistema
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        FRONTEND                              │
-│                    (Next.js + React)                        │
-│                      Puerto: 3000                           │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    API GATEWAY                               │
-│                     (KrakenD)                                │
-│                    Puerto: 8080                              │
-│              - Routing                                       │
-│              - JWT Validation                                │
-│              - Rate Limiting                                 │
-│              - CORS                                          │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-         ┌───────────────┼───────────────┐
-         ▼               ▼               ▼
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│   USERS     │  │   SPACES    │  │  BOOKINGS   │
-│  SERVICE    │  │   SERVICE   │  │   SERVICE   │
-│  :8082      │  │   :8083     │  │   :8084     │
-└──────┬──────┘  └──────┬──────┘  └──────┬──────┘
-       │                │                │
-       ▼                ▼                ▼
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│  postgres   │  │  postgres   │  │  postgres   │
-│   users     │  │   spaces    │  │  bookings   │
-│   :5433     │  │   :5434     │  │   :5435     │
-└─────────────┘  └─────────────┘  └─────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                      KEYCLOAK                                │
-│                    Puerto: 8081                              │
-│              - Autenticación OAuth2/OIDC                    │
-│              - Gestión de usuarios                          │
-│              - Roles y permisos                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Microservicios
-
-1. **users-service** (Puerto 8082)
-   - Gestión de perfiles de usuario
-   - Sincronización con Keycloak
-   - CRUD de usuarios
-
-2. **spaces-service** (Puerto 8083)
-   - Gestión de espacios
-   - Búsqueda con filtros
-   - Fotos y características
-
-3. **bookings-service** (Puerto 8084)
-   - Gestión de reservas
-   - Verificación de disponibilidad
-   - Estados de reserva
+**Infraestructura:**
+- `docker-compose.yml` con todos los servicios
+- Configuración de Keycloak (`realm-export.json`)
+- Configuración de KrakenD (`krakend.json`)
 
 ---
 
-## 📝 Registro de Desarrollo
+### 3. Configuración de Git y GitHub
 
-### Sesión 1 - 26 de Noviembre de 2025
+**Repositorio:** https://github.com/amolrod/balconazo
 
-#### Fase 1: Análisis de Documentación
-- ✅ Revisión de documentación existente del proyecto
-- ✅ Identificación de estructura del proyecto (0% implementación previa)
-- ✅ Análisis de requisitos técnicos
+**Push inicial:** 93 archivos subidos
 
-#### Fase 2: Scaffolding del Proyecto
-- ✅ Creación de estructura completa de microservicios
-- ✅ Configuración de `realm-export.json` para Keycloak
-- ✅ Configuración de `krakend.json` para API Gateway
-- ✅ Estructura de frontend con Next.js 15
-
-#### Fase 3: Configuración de Git/GitHub
-- ✅ Push inicial al repositorio (93 archivos)
-- ✅ Creación de ramas:
-  - `main` - Producción
-  - `develop` - Integración
-  - `feature/backend-setup` - Backend
-  - `feature/frontend-setup` - Frontend
-
-#### Fase 4: Migración a Bun
-- ✅ Configuración de Bun como runtime y gestor de paquetes
-- ✅ Actualización de package.json, Dockerfile, CI workflow
-- ✅ Compilación exitosa del frontend
-
-#### Fase 5: Backend - Infraestructura
-- ✅ Creación de archivo `.env` desde `.env.example`
-- ✅ Levantamiento de bases de datos PostgreSQL (3 instancias)
-- ✅ Importación del realm de Keycloak
-
-#### Fase 6: Backend - Corrección de Errores
-- ✅ **Fix Flyway**: Añadida propiedad `<flyway.version>10.0.0</flyway.version>` en todos los pom.xml
-- ✅ **Fix SpaceRepository**: Reemplazado JPQL problemático con `JpaSpecificationExecutor` para evitar error `lower(bytea)`
-- ✅ **Fix JWT Issuer**: Configuración de issuer-uri como `http://localhost:8081` en docker-compose.yml para consistencia
-- ✅ **Fix UserService**: Email único usando keycloakId para evitar duplicados
-
-#### Fase 7: Backend - Validación
-- ✅ Compilación exitosa de los 3 microservicios
-- ✅ Construcción de imágenes Docker
-- ✅ Health checks pasando para todos los servicios
-- ✅ Autenticación JWT funcionando end-to-end
-- ✅ Gateway KrakenD validando tokens correctamente
-
-### Archivos Modificados/Creados Clave
-
-```
-backend/
-├── users-service/
-│   ├── pom.xml                    # Añadido flyway.version
-│   └── src/main/java/.../service/
-│       └── UserService.java       # Fix email único
-├── spaces-service/
-│   ├── pom.xml                    # Añadido flyway.version
-│   └── src/main/java/.../repository/
-│       └── SpaceSpecification.java # Nueva clase para filtros
-└── bookings-service/
-    └── pom.xml                    # Añadido flyway.version
-
-gateway/
-└── krakend.json                   # Fix endpoint health
-
-keycloak/
-└── realm-export.json              # sslRequired: none
-
-docker-compose.yml                  # Variables JWT y extra_hosts
-```
+**Ramas creadas:**
+- `main` - Rama de producción
+- `develop` - Rama de integración
+- `feature/backend-setup` - Trabajo en backend
+- `feature/frontend-setup` - Trabajo en frontend
 
 ---
 
-## ✅ Estado Actual
+### 4. Decisión: Bun vs npm
 
-### Backend - Completado ✅
+Se evaluó usar Bun en lugar de npm para el frontend por sus ventajas:
+- Velocidad de instalación ~10x más rápida
+- Runtime más eficiente
+- Compatible con npm
 
-| Componente | Estado | Puerto | Health |
-|------------|--------|--------|--------|
-| postgres-users | ✅ Running | 5433 | Healthy |
-| postgres-spaces | ✅ Running | 5434 | Healthy |
-| postgres-bookings | ✅ Running | 5435 | Healthy |
-| keycloak | ✅ Running | 8081 | OK |
-| users-service | ✅ Running | 8082 | UP |
-| spaces-service | ✅ Running | 8083 | UP |
-| bookings-service | ✅ Running | 8084 | UP |
-| krakend | ✅ Running | 8080 | OK |
+**Cambios realizados:**
+- Actualizado `package.json` con scripts de Bun
+- Actualizado `Dockerfile` del frontend
+- Actualizado workflow de CI/CD
 
-### Endpoints Verificados
+---
+
+### 5. Levantamiento del Backend
+
+#### 5.1 Creación del archivo .env
+
+Copié `.env.example` a `.env` con las variables de entorno necesarias.
+
+#### 5.2 Inicio de las bases de datos
 
 ```bash
-# Público - Listar espacios
-GET http://localhost:8080/api/spaces → 200 OK
-
-# Autenticado - Perfil de usuario
-GET http://localhost:8080/api/users/me → 200 OK (con JWT)
-
-# Health checks
-GET http://localhost:8080/__health → {"status": "ok"}
-GET http://localhost:8082/actuator/health → {"status": "UP"}
-GET http://localhost:8083/actuator/health → {"status": "UP"}
-GET http://localhost:8084/actuator/health → {"status": "UP"}
+docker-compose up -d postgres-users postgres-spaces postgres-bookings
 ```
 
-### Usuarios de Prueba Configurados
+Las 3 instancias de PostgreSQL iniciaron correctamente en puertos 5433, 5434 y 5435.
 
-| Usuario | Password | Rol |
-|---------|----------|-----|
-| user_guest | guest123 | ROLE_USER |
-| host_demo | host123 | ROLE_USER, ROLE_HOST |
-| admin_host | admin123 | ROLE_USER, ROLE_HOST, ROLE_ADMIN |
+#### 5.3 Inicio de Keycloak
 
-### Flujo de Autenticación Verificado
+```bash
+docker-compose up -d keycloak
+```
 
+Keycloak inició en el puerto 8081.
+
+---
+
+### 6. Errores Encontrados y Soluciones
+
+#### ❌ Error 1: Flyway - Versión no especificada
+
+**Error:**
+```
+Cannot find artifact 'org.flywaydb:flyway-database-postgresql:jar:${flyway.version}'
+```
+
+**Causa:** Faltaba la propiedad `flyway.version` en los archivos `pom.xml`.
+
+**Solución:** Añadí la propiedad en los 3 microservicios:
+```xml
+<properties>
+    <java.version>21</java.version>
+    <flyway.version>10.0.0</flyway.version>
+</properties>
+```
+
+**Archivos modificados:**
+- `backend/users-service/pom.xml`
+- `backend/spaces-service/pom.xml`
+- `backend/bookings-service/pom.xml`
+
+---
+
+#### ❌ Error 2: SpaceRepository - función lower(bytea)
+
+**Error:**
+```
+ERROR: function lower(bytea) does not exist
+Hint: No function matches the given name and argument types.
+```
+
+**Causa:** La consulta JPQL con parámetros NULL en Hibernate 6+ causaba problemas de tipado.
+
+**Consulta problemática:**
+```java
+@Query("SELECT s FROM Space s WHERE s.active = true " +
+       "AND (:city IS NULL OR LOWER(s.city) LIKE LOWER(CONCAT('%', :city, '%')))")
+Page<Space> findWithFilters(@Param("city") String city, ...);
+```
+
+**Solución:** Creé una nueva clase `SpaceSpecification.java` usando el patrón Specification de JPA:
+
+```java
+public class SpaceSpecification {
+    public static Specification<Space> withFilters(SpaceFilter filter) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.isTrue(root.get("active")));
+            
+            if (filter.getCity() != null && !filter.getCity().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("city")), 
+                    "%" + filter.getCity().toLowerCase() + "%"));
+            }
+            // ... más filtros
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+}
+```
+
+**Archivos creados/modificados:**
+- `backend/spaces-service/src/main/java/com/balconazo/spaces/repository/SpaceSpecification.java` (nuevo)
+- `backend/spaces-service/src/main/java/com/balconazo/spaces/service/SpaceService.java` (modificado)
+
+---
+
+#### ❌ Error 3: Keycloak - HTTPS Required
+
+**Error:**
+```json
+{"error": "invalid_request", "error_description": "HTTPS required"}
+```
+
+**Causa:** Keycloak por defecto requiere HTTPS para los endpoints de autenticación.
+
+**Solución:** 
+1. Modifiqué `realm-export.json`:
+```json
+"sslRequired": "none"
+```
+
+2. Ejecuté comandos en el contenedor de Keycloak:
+```bash
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh config credentials \
+  --server http://localhost:8080 --realm master --user admin --password admin
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh update realms/master \
+  -s sslRequired=NONE
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh update realms/balconazo \
+  -s sslRequired=NONE
+```
+
+---
+
+#### ❌ Error 4: JWT Issuer Mismatch
+
+**Error:**
+```
+The iss claim is not valid
+Failed to authenticate since the JWT was invalid
+```
+
+**Causa:** El token JWT se generaba con issuer `http://localhost:8081/realms/balconazo` pero los microservicios dentro de Docker esperaban `http://keycloak:8080/realms/balconazo`.
+
+**Solución:** Configuré los microservicios para:
+- Validar el issuer como `http://localhost:8081/realms/balconazo`
+- Obtener las claves JWK desde `http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs`
+
+**Cambios en docker-compose.yml:**
+```yaml
+environment:
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8081/realms/balconazo
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs
+```
+
+---
+
+#### ❌ Error 5: Duplicate Key - Email único
+
+**Error:**
+```
+ERROR: duplicate key value violates unique constraint "users_email_key"
+Detail: Key (email)=(unknown@balconazo.local) already exists.
+```
+
+**Causa:** Cuando el token JWT no incluía email, el sistema usaba un email por defecto (`unknown@balconazo.local`) para todos los usuarios nuevos.
+
+**Solución:** Modifiqué `UserService.java` para usar el `keycloakId` como parte del email cuando no hay email en el token:
+
+```java
+// Antes
+String userEmail = email != null ? email : "unknown@balconazo.local";
+
+// Después
+String userEmail = email != null ? email : keycloakId + "@balconazo.local";
+```
+
+---
+
+#### ❌ Error 6: KrakenD - Invalid Health Endpoint
+
+**Error:**
+```
+ERROR parsing the configuration file: ignoring the 'GET /__health' endpoint, since it is invalid!!!
+```
+
+**Causa:** El endpoint `/__health` estaba mal configurado, apuntando a sí mismo como backend.
+
+**Solución:** Eliminé el endpoint personalizado de health y dejé que KrakenD use su endpoint interno.
+
+---
+
+### 7. Configuración de Usuarios de Prueba
+
+Las contraseñas no se importaban correctamente desde el `realm-export.json`, así que las configuré manualmente:
+
+```bash
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username user_guest --new-password guest123
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username host_demo --new-password host123
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username admin_host --new-password admin123
+```
+
+---
+
+### 8. Verificación Final
+
+**Health Checks:**
+```bash
+curl http://localhost:8082/actuator/health  # users-service: UP
+curl http://localhost:8083/actuator/health  # spaces-service: UP
+curl http://localhost:8084/actuator/health  # bookings-service: UP
+curl http://localhost:8080/__health         # krakend: ok
+```
+
+**Test de Autenticación Completo:**
 ```bash
 # 1. Obtener token
-curl -X POST "http://localhost:8081/realms/balconazo/protocol/openid-connect/token" \
+ACCESS_TOKEN=$(curl -s -X POST "http://localhost:8081/realms/balconazo/protocol/openid-connect/token" \
   -d "client_id=balconazo-frontend" \
   -d "grant_type=password" \
   -d "username=user_guest" \
-  -d "password=guest123"
+  -d "password=guest123" | jq -r '.access_token')
 
-# 2. Usar token en peticiones
-curl -H "Authorization: Bearer <TOKEN>" \
-  http://localhost:8080/api/users/me
+# 2. Llamar endpoint protegido
+curl -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/api/users/me
+```
+
+**Respuesta exitosa:**
+```json
+{
+  "id": "467e606d-da42-4fff-98ac-db0a02759502",
+  "email": "f0868e72-2006-4074-a665-f089dc9d7e17@balconazo.local",
+  "fullName": "Usuario Nuevo",
+  "roles": ["ROLE_USER"]
+}
 ```
 
 ---
 
-## 🚀 Próximos Pasos
+### 9. Commit y Push
 
-### Corto Plazo (Backend)
-- [ ] Añadir datos de prueba (seed data)
-- [ ] Implementar tests unitarios e integración
-- [ ] Configurar scopes de Keycloak para incluir email/nombre en tokens
-- [ ] Documentar API con OpenAPI/Swagger
-
-### Mediano Plazo (Frontend)
-- [ ] Implementar páginas de autenticación (login/registro)
-- [ ] Crear página de listado de espacios
-- [ ] Implementar detalle de espacio
-- [ ] Sistema de reservas
-
-### Largo Plazo
-- [ ] Sistema de pagos (Stripe)
-- [ ] Sistema de notificaciones
-- [ ] Panel de administración
-- [ ] Despliegue en producción
+```bash
+git add -A
+git commit -m "feat(backend): Backend completamente funcional con autenticación JWT"
+git push origin feature/backend-setup
+```
 
 ---
 
-## 📊 Métricas del Proyecto
+## Resumen de la Sesión 1
 
-| Métrica | Valor |
-|---------|-------|
-| Archivos totales | ~100+ |
-| Microservicios | 3 |
-| Contenedores Docker | 8 |
-| Tiempo de desarrollo (Sesión 1) | ~3 horas |
-| Líneas de código (estimado) | ~5000+ |
+| Tarea | Estado |
+|-------|--------|
+| Análisis de documentación | ✅ |
+| Scaffolding completo | ✅ |
+| Configuración Git/GitHub | ✅ |
+| Migración a Bun | ✅ |
+| Backend funcional | ✅ |
+| Autenticación JWT | ✅ |
+| Gateway KrakenD | ✅ |
+| Documentación | ✅ |
+
+**Tiempo aproximado:** ~3 horas
+
+**Próximos pasos:**
+- Añadir datos de prueba (seed data)
+- Implementar tests
+- Desarrollar frontend
 
 ---
 
-## 📚 Referencias
-
-- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
-- [Keycloak Documentation](https://www.keycloak.org/documentation)
-- [KrakenD Documentation](https://www.krakend.io/docs/)
-- [Next.js Documentation](https://nextjs.org/docs)
-
----
-
-*Documento actualizado: 26 de Noviembre de 2025*
+*Última actualización: 26 de Noviembre de 2025*

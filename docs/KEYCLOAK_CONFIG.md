@@ -224,39 +224,50 @@ Puedes crear mappers similares para `given_name` y `family_name` según necesida
 
 ---
 
+
 ## **7. Creación de usuarios de prueba**
 
-Crearemos dos usuarios de ejemplo:
+### **7.1 Usuarios preconfigurados**
 
-* `guest1` → rol `ROLE_USER`.
+El proyecto incluye los siguientes usuarios de prueba en el archivo `realm-export.json`:
 
-* `host1` → roles `ROLE_USER` + `ROLE_HOST`.
+| Usuario | Contraseña | Roles | Descripción |
+|---------|------------|-------|-------------|
+| `user_guest` | `guest123` | ROLE_USER | Usuario básico (huésped) |
+| `host_demo` | `host123` | ROLE_USER, ROLE_HOST | Anfitrión que puede publicar espacios |
+| `admin_host` | `admin123` | ROLE_USER, ROLE_HOST, ROLE_ADMIN | Administrador con todos los permisos |
 
-Crear usuario `guest1`
+> **Nota:** Las contraseñas no se importan automáticamente desde `realm-export.json`. Deben configurarse manualmente tras el primer inicio.
+
+### **7.2 Configurar contraseñas via CLI**
+
+```bash
+# Autenticarse en Keycloak
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh config credentials \
+  --server http://localhost:8080 --realm master --user admin --password admin
+
+# Establecer contraseñas para usuarios de prueba
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username user_guest --new-password guest123
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username host_demo --new-password host123
+
+docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh set-password \
+  -r balconazo --username admin_host --new-password admin123
+```
+
+### **7.3 Crear usuarios adicionales**
 
 1. Menú lateral → **Users** → botón **Add user**.
-
-2. **Username**: `guest1`.
-
+2. **Username**: nombre del usuario.
 3. Establece **Email**, **First name** y **Last name** si lo deseas.
-
 4. Marca `Email verified` si quieres omitir verificación.
-
 5. Guarda.
-
-6. Ve a la pestaña **Credentials**, establece una contraseña (por ejemplo, `guest1`), desactiva “Temporary” para que no obligue a cambiarla.
-
+6. Ve a la pestaña **Credentials**, establece una contraseña, desactiva "Temporary".
 7. Ve a la pestaña **Role mappings**.
+8. En **Realm roles**, selecciona los roles necesarios y pulsa **Add selected**.
 
-8. En **Realm roles**, selecciona `ROLE_USER` y pulsa **Add selected**.
-
-Crear usuario `host1`
-
-* Repite los pasos anteriores cambiando `Username` a `host1`.
-
-* En **Role mappings**, asigna `ROLE_USER` y `ROLE_HOST`.
-
----
 
 ## **8. Configuración de social login (Google)**
 

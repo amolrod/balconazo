@@ -21,99 +21,104 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 
 ---
 
-## **2. Fase 1: Fundamentos y Usuarios (Sprint 1)**
+## **2. Fase 1: Fundamentos y Usuarios (Sprint 1)** ✅ COMPLETADO
 
 **Objetivo:** Tener la infraestructura base y el microservicio de usuarios operativo y seguro.
 
+**Estado:** ✅ Completado el 26/11/2025
+
 ### **2.1 Infraestructura y Configuración**
 *   [x] **Docker Compose**: Definir servicios de BD, Keycloak, KrakenD.
-*   [ ] **Keycloak**:
+*   [x] **Keycloak**:
     *   Acceder a `localhost:8081`.
     *   Crear Realm `balconazo`.
     *   Crear Cliente `balconazo-frontend` (Public) y `balconazo-api` (Bearer-only).
     *   Crear Roles: `ROLE_USER`, `ROLE_HOST`.
     *   Crear usuario de prueba `admin_host` (con rol HOST) y `user_guest` (con rol USER).
-*   [ ] **Base de Datos**: Verificar que `postgres-users` está arriba y accesible.
+*   [x] **Base de Datos**: Verificar que `postgres-users` está arriba y accesible.
 
 ### **2.2 Microservicio Usuarios (`users-service`)**
-*   [ ] **Estructura**: Crear paquetes `model`, `repository`, `service`, `controller`, `config`.
-*   [ ] **Seguridad**: Configurar `SecurityConfig.java` para validar JWT de Keycloak.
-*   [ ] **Modelo de Datos**:
+*   [x] **Estructura**: Crear paquetes `model`, `repository`, `service`, `controller`, `config`.
+*   [x] **Seguridad**: Configurar `SecurityConfig.java` para validar JWT de Keycloak.
+*   [x] **Modelo de Datos**:
     *   Crear entidad `User` (id, email, name, surname, keycloakId).
     *   Crear migración Flyway `V1__create_users_table.sql`.
-*   [ ] **Lógica de Negocio**:
+*   [x] **Lógica de Negocio**:
     *   Implementar `UserService.getOrCreate(keycloakId, userInfo)`: si el usuario no existe en BD local, lo crea con datos del token.
-*   [ ] **API REST**:
+*   [x] **API REST**:
     *   `GET /users/me`: Devuelve datos del usuario autenticado.
     *   `PUT /users/me`: Actualizar datos básicos.
 
 ### **2.3 API Gateway**
-*   [ ] **KrakenD**:
+*   [x] **KrakenD**:
     *   Configurar endpoint `/api/users/me` que redirija a `users-service`.
     *   Validar que rechaza peticiones sin token.
 
-**✅ Entregable Sprint 1:**
-*   Comando `curl` a `localhost:8080/api/users/me` con token devuelve JSON 200 OK.
-*   Tabla `users` en Postgres tiene 1 registro tras el primer login.
+**✅ Entregable Sprint 1:** VERIFICADO
+*   ✅ Comando `curl` a `localhost:8080/api/users/me` con token devuelve JSON 200 OK.
+*   ✅ Tabla `users` en Postgres tiene 1 registro tras el primer login.
 
 ---
 
-## **3. Fase 2: Gestión de Espacios (Sprint 2)**
+## **3. Fase 2: Gestión de Espacios (Sprint 2)** ✅ COMPLETADO
 
 **Objetivo:** Permitir a los anfitriones publicar espacios (CRUD).
 
+**Estado:** ✅ Completado el 26/11/2025
+
 ### **3.1 Microservicio Espacios (`spaces-service`)**
-*   [ ] **Modelo de Datos**:
+*   [x] **Modelo de Datos**:
     *   Entidad `Space` (id, hostId, title, description, price, city, capacity, active).
     *   Entidad `SpacePhoto` (id, spaceId, url).
     *   Migración Flyway `V1__create_spaces_tables.sql`.
-*   [ ] **Repositorio**:
+*   [x] **Repositorio**:
     *   `findByHostId(UUID hostId)`
     *   `findByCityAndPrice...(filtros)` (Specification o Query).
-*   [ ] **Servicio**:
+*   [x] **Servicio**:
     *   `createSpace(dto, hostId)`: Validar que el usuario tiene rol `ROLE_HOST`.
     *   `updateSpace(id, dto, hostId)`: Validar que el espacio pertenece al usuario.
-*   [ ] **API REST**:
+*   [x] **API REST**:
     *   `POST /spaces` (Solo Hosts).
     *   `GET /spaces` (Público, con filtros).
     *   `GET /spaces/{id}` (Público).
     *   `DELETE /spaces/{id}` (Solo Owner).
 
 ### **3.2 Integración**
-*   [ ] **KrakenD**: Exponer rutas `/api/spaces/*`.
-*   [ ] **Fotos**: Para simplificar, usar URLs de texto o integrar un servicio dummy de subida (o base64 temporalmente).
+*   [x] **KrakenD**: Exponer rutas `/api/spaces/*`.
+*   [x] **Fotos**: Para simplificar, usar URLs de texto o integrar un servicio dummy de subida (o base64 temporalmente).
 
-**✅ Entregable Sprint 2:**
-*   Usuario con rol HOST puede crear un espacio.
-*   Usuario anónimo puede listar espacios filtrando por ciudad.
+**✅ Entregable Sprint 2:** VERIFICADO
+*   ✅ Usuario con rol HOST puede crear un espacio.
+*   ✅ Usuario anónimo puede listar espacios filtrando por ciudad.
 
 ---
 
-## **4. Fase 3: Reservas y Lógica de Negocio (Sprint 3)**
+## **4. Fase 3: Reservas y Lógica de Negocio (Sprint 3)** ✅ COMPLETADO
 
 **Objetivo:** Gestión de reservas y prevención de conflictos.
 
+**Estado:** ✅ Completado el 26/11/2025
+
 ### **4.1 Microservicio Reservas (`bookings-service`)**
-*   [ ] **Modelo de Datos**:
+*   [x] **Modelo de Datos**:
     *   Entidad `Booking` (id, spaceId, guestId, startTime, endTime, status, totalPrice).
     *   Migración Flyway `V1__create_bookings_table.sql`.
-*   [ ] **Validaciones Críticas**:
+*   [x] **Validaciones Críticas**:
     *   **Fechas**: `startTime` < `endTime`.
     *   **Disponibilidad**: Consultar BD para asegurar que NO existe reserva solapada (`WHERE space_id = ? AND status != 'CANCELLED' AND (start < ? AND end > ?)`).
-*   [ ] **API REST**:
+*   [x] **API REST**:
     *   `POST /bookings`: Crear reserva (Pendiente/Confirmada).
     *   `GET /bookings/me`: Historial del huésped.
     *   `GET /bookings/host`: Reservas recibidas (para el anfitrión).
     *   `PUT /bookings/{id}/cancel`: Cancelar.
 
 ### **4.2 Comunicación entre Servicios**
-*   [ ] **Validar Espacio**: Al crear reserva, `bookings-service` debe saber si el `spaceId` existe y su precio.
-    *   *Opción A (Simple)*: Confiar en el frontend (inseguro).
+*   [x] **Validar Espacio**: Al crear reserva, `bookings-service` debe saber si el `spaceId` existe y su precio.
     *   *Opción B (Mejor)*: `bookings-service` llama a `spaces-service` (Feign Client o RestTemplate) para validar y obtener precio.
 
-**✅ Entregable Sprint 3:**
-*   No se pueden crear dos reservas para el mismo espacio a la misma hora.
-*   El precio total se calcula correctamente en el backend.
+**✅ Entregable Sprint 3:** VERIFICADO
+*   ✅ No se pueden crear dos reservas para el mismo espacio a la misma hora.
+*   ✅ El precio total se calcula correctamente en el backend.
 
 ---
 
