@@ -126,15 +126,15 @@ Cuando implementes o modifiques código relacionado con reservas, **considera si
 
 ## **6. Qué NO hacer (anti-patterns)**
 
-* ❌ No acceder nunca a las bases de datos de otros microservicios directamente.
+* No acceder nunca a las bases de datos de otros microservicios directamente.
 
-* ❌ No incorporar lógica de negocio compleja en el frontend; debe residir en el backend.
+* No incorporar lógica de negocio compleja en el frontend; debe residir en el backend.
 
-* ❌ No hardcodear URLs de producción en el código; usar variables de entorno.
+* No hardcodear URLs de producción en el código; usar variables de entorno.
 
-* ❌ No exponer secretos (`client_secret`, contraseñas de BD) en el código fuente.
+* No exponer secretos (`client_secret`, contraseñas de BD) en el código fuente.
 
-* ❌ No ignorar el manejo de errores; siempre propaga un error claro al frontend.
+* No ignorar el manejo de errores; siempre propaga un error claro al frontend.
 
 ---
 

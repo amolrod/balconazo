@@ -1,4 +1,4 @@
-# 📓 Diario de Desarrollo - TFG BalconazoApp
+# Diario de Desarrollo - TFG BalconazoApp
 
 **Proyecto:** BalconazoApp - Marketplace de alquiler de espacios por horas  
 **Autor:** Ángel Molina Rodríguez  
@@ -108,7 +108,7 @@ Keycloak inició en el puerto 8081.
 
 ### 6. Errores Encontrados y Soluciones
 
-#### ❌ Error 1: Flyway - Versión no especificada
+#### Error 1: Flyway - Versión no especificada
 
 **Error:**
 ```
@@ -132,7 +132,7 @@ Cannot find artifact 'org.flywaydb:flyway-database-postgresql:jar:${flyway.versi
 
 ---
 
-#### ❌ Error 2: SpaceRepository - función lower(bytea)
+#### Error 2: SpaceRepository - función lower(bytea)
 
 **Error:**
 ```
@@ -175,7 +175,7 @@ public class SpaceSpecification {
 
 ---
 
-#### ❌ Error 3: Keycloak - HTTPS Required
+#### Error 3: Keycloak - HTTPS Required
 
 **Error:**
 ```json
@@ -204,7 +204,7 @@ docker exec balconazoapp-keycloak /opt/keycloak/bin/kcadm.sh update realms/balco
 
 ---
 
-#### ❌ Error 4: JWT Issuer Mismatch
+#### Error 4: JWT Issuer Mismatch
 
 **Error:**
 ```
@@ -227,7 +227,7 @@ environment:
 
 ---
 
-#### ❌ Error 5: Duplicate Key - Email único
+#### Error 5: Duplicate Key - Email único
 
 **Error:**
 ```
@@ -249,7 +249,7 @@ String userEmail = email != null ? email : keycloakId + "@balconazo.local";
 
 ---
 
-#### ❌ Error 6: KrakenD - Invalid Health Endpoint
+#### Error 6: KrakenD - Invalid Health Endpoint
 
 **Error:**
 ```
@@ -328,14 +328,14 @@ git push origin feature/backend-setup
 
 | Tarea | Estado |
 |-------|--------|
-| Análisis de documentación | ✅ |
-| Scaffolding completo | ✅ |
-| Configuración Git/GitHub | ✅ |
-| Migración a Bun | ✅ |
-| Backend funcional | ✅ |
-| Autenticación JWT | ✅ |
-| Gateway KrakenD | ✅ |
-| Documentación | ✅ |
+| Análisis de documentación | Completado |
+| Scaffolding completo | Completado |
+| Configuración Git/GitHub | Completado |
+| Migración a Bun | Completado |
+| Backend funcional | Completado |
+| Autenticación JWT | Completado |
+| Gateway KrakenD | Completado |
+| Documentación | Completado |
 
 **Tiempo aproximado:** ~3 horas
 

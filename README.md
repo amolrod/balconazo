@@ -1,4 +1,4 @@
-# BalconazoApp 🏠
+# BalconazoApp
 
 [![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%203.2-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2015-000000?logo=nextdotjs)](https://nextjs.org/)
@@ -7,18 +7,18 @@
 
 **BalconazoApp** es un marketplace de alquiler de espacios por horas (terrazas, balcones, jardines, salones) entre particulares.
 
-## 🏗️ Estado del Proyecto
+## Estado del Proyecto
 
 | Componente | Estado | Notas |
 |------------|--------|-------|
-| Backend - users-service | ✅ Funcional | Autenticación JWT completa |
-| Backend - spaces-service | ✅ Funcional | CRUD de espacios con filtros |
-| Backend - bookings-service | ✅ Funcional | Gestión de reservas |
-| API Gateway (KrakenD) | ✅ Funcional | Routing y validación JWT |
-| Autenticación (Keycloak) | ✅ Funcional | OAuth2/OIDC configurado |
-| Frontend (Next.js) | 🔄 En progreso | Estructura base creada |
+| Backend - users-service | Funcional | Autenticación JWT completa |
+| Backend - spaces-service | Funcional | CRUD de espacios con filtros |
+| Backend - bookings-service | Funcional | Gestión de reservas |
+| API Gateway (KrakenD) | Funcional | Routing y validación JWT |
+| Autenticación (Keycloak) | Funcional | OAuth2/OIDC configurado |
+| Frontend (Next.js) | En progreso | Estructura base creada |
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 - **Backend:** Java 21, Spring Boot 3.2.0, PostgreSQL 16, Flyway
 - **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, Bun
@@ -26,7 +26,7 @@
 - **Gateway:** KrakenD 2.4
 - **Infraestructura:** Docker, Docker Compose
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 balconazo/
@@ -41,7 +41,7 @@ balconazo/
 └── docs/                   # Documentación técnica
 ```
 
-## 🚀 Quickstart
+## Quickstart
 
 ### Prerrequisitos
 
@@ -104,7 +104,7 @@ curl -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/api/users/me
 curl http://localhost:8080/api/spaces
 ```
 
-## 📚 Documentación
+## Documentación
 
 Consulta la carpeta `docs/` para guías detalladas:
 
@@ -115,14 +115,14 @@ Consulta la carpeta `docs/` para guías detalladas:
 - [Guía de Desarrollo Frontend](docs/FRONTEND_DEVELOPMENT_GUIDE.md)
 - [Roadmap del Proyecto](docs/PROJECT_ROADMAP.md)
 
-## 📖 Diario de Desarrollo (TFG)
+## Diario de Desarrollo (TFG)
 
 El archivo [TFG.md](TFG.md) contiene el diario de desarrollo con todos los pasos realizados, errores solucionados y decisiones técnicas tomadas.
 
-## 🤝 Contribución
+## Contribución
 
 Este proyecto es parte de un TFG (Trabajo de Fin de Grado).
 
-## 📄 Licencia
+## Licencia
 
 MIT License

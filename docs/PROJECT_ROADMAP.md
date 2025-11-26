@@ -21,11 +21,11 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 
 ---
 
-## **2. Fase 1: Fundamentos y Usuarios (Sprint 1)** ✅ COMPLETADO
+## **2. Fase 1: Fundamentos y Usuarios (Sprint 1)** - COMPLETADO
 
 **Objetivo:** Tener la infraestructura base y el microservicio de usuarios operativo y seguro.
 
-**Estado:** ✅ Completado el 26/11/2025
+**Estado:** Completado el 26/11/2025
 
 ### **2.1 Infraestructura y Configuración**
 *   [x] **Docker Compose**: Definir servicios de BD, Keycloak, KrakenD.
@@ -54,17 +54,17 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
     *   Configurar endpoint `/api/users/me` que redirija a `users-service`.
     *   Validar que rechaza peticiones sin token.
 
-**✅ Entregable Sprint 1:** VERIFICADO
-*   ✅ Comando `curl` a `localhost:8080/api/users/me` con token devuelve JSON 200 OK.
-*   ✅ Tabla `users` en Postgres tiene 1 registro tras el primer login.
+**Entregable Sprint 1:** VERIFICADO
+*   Comando `curl` a `localhost:8080/api/users/me` con token devuelve JSON 200 OK.
+*   Tabla `users` en Postgres tiene 1 registro tras el primer login.
 
 ---
 
-## **3. Fase 2: Gestión de Espacios (Sprint 2)** ✅ COMPLETADO
+## **3. Fase 2: Gestión de Espacios (Sprint 2)** - COMPLETADO
 
 **Objetivo:** Permitir a los anfitriones publicar espacios (CRUD).
 
-**Estado:** ✅ Completado el 26/11/2025
+**Estado:** Completado el 26/11/2025
 
 ### **3.1 Microservicio Espacios (`spaces-service`)**
 *   [x] **Modelo de Datos**:
@@ -87,17 +87,17 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 *   [x] **KrakenD**: Exponer rutas `/api/spaces/*`.
 *   [x] **Fotos**: Para simplificar, usar URLs de texto o integrar un servicio dummy de subida (o base64 temporalmente).
 
-**✅ Entregable Sprint 2:** VERIFICADO
-*   ✅ Usuario con rol HOST puede crear un espacio.
-*   ✅ Usuario anónimo puede listar espacios filtrando por ciudad.
+**Entregable Sprint 2:** VERIFICADO
+*   Usuario con rol HOST puede crear un espacio.
+*   Usuario anónimo puede listar espacios filtrando por ciudad.
 
 ---
 
-## **4. Fase 3: Reservas y Lógica de Negocio (Sprint 3)** ✅ COMPLETADO
+## **4. Fase 3: Reservas y Lógica de Negocio (Sprint 3)** - COMPLETADO
 
 **Objetivo:** Gestión de reservas y prevención de conflictos.
 
-**Estado:** ✅ Completado el 26/11/2025
+**Estado:** Completado el 26/11/2025
 
 ### **4.1 Microservicio Reservas (`bookings-service`)**
 *   [x] **Modelo de Datos**:
@@ -116,9 +116,9 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 *   [x] **Validar Espacio**: Al crear reserva, `bookings-service` debe saber si el `spaceId` existe y su precio.
     *   *Opción B (Mejor)*: `bookings-service` llama a `spaces-service` (Feign Client o RestTemplate) para validar y obtener precio.
 
-**✅ Entregable Sprint 3:** VERIFICADO
-*   ✅ No se pueden crear dos reservas para el mismo espacio a la misma hora.
-*   ✅ El precio total se calcula correctamente en el backend.
+**Entregable Sprint 3:** VERIFICADO
+*   No se pueden crear dos reservas para el mismo espacio a la misma hora.
+*   El precio total se calcula correctamente en el backend.
 
 ---
 
@@ -141,7 +141,7 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 *   [ ] **Detalle (`/spaces/[id]`)**: Info completa + Botón "Reservar".
 *   [ ] **Publicar (`/become-host`)**: Formulario para crear espacio.
 
-**✅ Entregable Sprint 4:**
+**Entregable Sprint 4:**
 *   Flujo completo: Login -> Buscar -> Ver Detalle -> Reservar.
 
 ---
@@ -165,6 +165,6 @@ Este documento organiza el desarrollo de **BalconazoApp** en una serie de **Spri
 *   [ ] **Docker Prod**: Revisar `docker-compose.yml` final.
 *   [ ] **Nginx**: Configurar proxy inverso (opcional para local, necesario para VPS).
 
-**✅ Entregable Sprint 5:**
+**Entregable Sprint 5:**
 *   Aplicación completa, bonita y robusta.
 
