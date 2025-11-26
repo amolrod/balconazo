@@ -8,10 +8,28 @@
   "output_encoding": "json",
   "extra_config": {
     "security/cors": {
-      "allow_origins": ["http://localhost:3000"],
-      "allow_methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-      "allow_headers": ["Origin", "Authorization", "Content-Type", "Accept", "X-Requested-With"],
-      "expose_headers": ["Content-Length", "Content-Type"],
+      "allow_origins": [
+        "http://localhost:3000"
+      ],
+      "allow_methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "OPTIONS"
+      ],
+      "allow_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "Accept",
+        "X-Requested-With"
+      ],
+      "expose_headers": [
+        "Content-Length",
+        "Content-Type"
+      ],
       "allow_credentials": true,
       "max_age": "12h"
     },
@@ -32,7 +50,10 @@
       "endpoint": "/api/users/me",
       "method": "GET",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -41,17 +62,28 @@
           "cache_duration": 3600,
           "disable_jwk_security": true,
           "operation_debug": true,
-          "propagate_claims": [["sub", "x-user-id"], ["preferred_username", "x-user-name"]]
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-id"
+            ],
+            [
+              "preferred_username",
+              "x-user-name"
+            ]
+          ]
         }
       },
       "backend": [
         {
           "url_pattern": "/users/me",
-          "host": ["http://users-service:8080"],
+          "host": [
+            "http://users-service:8080"
+          ],
           "encoding": "json",
           "extra_config": {
             "backend/http": {
-              "return_error_details": "backend_error"
+              "return_error_details": "backend"
             }
           }
         }
@@ -61,7 +93,10 @@
       "endpoint": "/api/users/me",
       "method": "PUT",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -73,8 +108,15 @@
       "backend": [
         {
           "url_pattern": "/users/me",
-          "host": ["http://users-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://users-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -83,12 +125,27 @@
       "endpoint": "/api/spaces",
       "method": "GET",
       "output_encoding": "json",
-      "input_query_strings": ["city", "minPrice", "maxPrice", "capacity", "page", "size", "sort"],
+      "input_query_strings": [
+        "city",
+        "minPrice",
+        "maxPrice",
+        "capacity",
+        "page",
+        "size",
+        "sort"
+      ],
       "backend": [
         {
           "url_pattern": "/spaces",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -99,8 +156,15 @@
       "backend": [
         {
           "url_pattern": "/spaces/{id}",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -108,7 +172,10 @@
       "endpoint": "/api/spaces",
       "method": "POST",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -120,8 +187,15 @@
       "backend": [
         {
           "url_pattern": "/spaces",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -129,22 +203,30 @@
       "endpoint": "/api/spaces/{id}",
       "method": "PUT",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
-          "disable_jwk_security": true,
-          "roles_key": "realm_access.roles",
-          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+          "disable_jwk_security": true
         }
       },
       "backend": [
         {
           "url_pattern": "/spaces/{id}",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -152,22 +234,30 @@
       "endpoint": "/api/spaces/{id}",
       "method": "DELETE",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
-          "disable_jwk_security": true,
-          "roles_key": "realm_access.roles",
-          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+          "disable_jwk_security": true
         }
       },
       "backend": [
         {
           "url_pattern": "/spaces/{id}",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -175,23 +265,34 @@
       "endpoint": "/api/spaces/my",
       "method": "GET",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
-      "input_query_strings": ["page", "size"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "input_query_strings": [
+        "page",
+        "size"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
-          "disable_jwk_security": true,
-          "roles_key": "realm_access.roles",
-          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+          "disable_jwk_security": true
         }
       },
       "backend": [
         {
           "url_pattern": "/spaces/my",
-          "host": ["http://spaces-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://spaces-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -200,7 +301,10 @@
       "endpoint": "/api/bookings",
       "method": "POST",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -212,8 +316,15 @@
       "backend": [
         {
           "url_pattern": "/bookings",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -221,8 +332,15 @@
       "endpoint": "/api/bookings/me",
       "method": "GET",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
-      "input_query_strings": ["page", "size", "status"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "input_query_strings": [
+        "page",
+        "size",
+        "status"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -234,8 +352,15 @@
       "backend": [
         {
           "url_pattern": "/bookings/me",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -243,23 +368,35 @@
       "endpoint": "/api/bookings/host",
       "method": "GET",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
-      "input_query_strings": ["page", "size", "status"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "input_query_strings": [
+        "page",
+        "size",
+        "status"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
-          "disable_jwk_security": true,
-          "roles_key": "realm_access.roles",
-          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+          "disable_jwk_security": true
         }
       },
       "backend": [
         {
           "url_pattern": "/bookings/host",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -267,7 +404,10 @@
       "endpoint": "/api/bookings/{id}",
       "method": "GET",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -279,8 +419,15 @@
       "backend": [
         {
           "url_pattern": "/bookings/{id}",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -288,7 +435,10 @@
       "endpoint": "/api/bookings/{id}/cancel",
       "method": "PUT",
       "output_encoding": "json",
-      "input_headers": ["Authorization", "Content-Type"],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
       "extra_config": {
         "auth/validator": {
           "alg": "RS256",
@@ -300,8 +450,15 @@
       "backend": [
         {
           "url_pattern": "/bookings/{id}/cancel",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     },
@@ -309,12 +466,22 @@
       "endpoint": "/api/bookings/space/{spaceId}/availability",
       "method": "GET",
       "output_encoding": "json",
-      "input_query_strings": ["startDate", "endDate"],
+      "input_query_strings": [
+        "startDate",
+        "endDate"
+      ],
       "backend": [
         {
           "url_pattern": "/bookings/space/{spaceId}/availability",
-          "host": ["http://bookings-service:8080"],
-          "encoding": "json"
+          "host": [
+            "http://bookings-service:8080"
+          ],
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend"
+            }
+          }
         }
       ]
     }
