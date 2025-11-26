@@ -314,11 +314,91 @@ curl -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/api/users/me
 
 ---
 
+#### Error 7: JWT Roles No Extraídos (Granted Authorities=[])
+
+**Error:**
+```
+Set SecurityContextHolder to JwtAuthenticationToken [..., Granted Authorities=[]]
+```
+
+Las peticiones POST a `/api/spaces` fallaban con 403/500 porque los roles no se extraían del token JWT.
+
+**Causa:** El `JwtGrantedAuthoritiesConverter` de Spring Security NO soporta claims anidados como `realm_access.roles` de Keycloak. Al usar `.setAuthoritiesClaimName("realm_access.roles")` buscaba un claim llamado literalmente "realm_access.roles" en lugar de navegar el objeto anidado.
+
+**Estructura del token JWT de Keycloak:**
+```json
+{
+  "realm_access": {
+    "roles": ["ROLE_USER", "ROLE_HOST"]
+  }
+}
+```
+
+**Solución:** Creé un converter personalizado `KeycloakRealmRoleConverter` en los 3 microservicios:
+
+```java
+static class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+    @Override
+    public Collection<GrantedAuthority> convert(Jwt jwt) {
+        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+        if (realmAccess == null || !realmAccess.containsKey("roles")) {
+            return Collections.emptyList();
+        }
+        @SuppressWarnings("unchecked")
+        List<String> roles = (List<String>) realmAccess.get("roles");
+        return roles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
+    }
+}
+```
+
+**Archivos modificados:**
+- `backend/users-service/src/main/java/com/balconazo/users/config/SecurityConfig.java`
+- `backend/spaces-service/src/main/java/com/balconazo/spaces/config/SecurityConfig.java`
+- `backend/bookings-service/src/main/java/com/balconazo/bookings/config/SecurityConfig.java`
+
+**También modifiqué `gateway/krakend.json`:** Eliminé la validación de roles en KrakenD ya que Spring Security maneja la autorización.
+
+**Verificación:**
+```bash
+# Crear espacio con host_demo
+HOST_TOKEN=$(curl -s -X POST "http://localhost:8081/realms/balconazo/protocol/openid-connect/token" \
+  -d "client_id=balconazo-frontend" -d "grant_type=password" \
+  -d "username=host_demo" -d "password=host123" | jq -r '.access_token')
+
+curl -X POST http://localhost:8080/api/spaces \
+  -H "Authorization: Bearer $HOST_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Terraza Test","description":"Descripcion del espacio","spaceType":"TERRACE","pricePerHour":30.00,"capacity":15,"city":"Barcelona","address":"Calle Test 123"}'
+```
+
+**Respuesta exitosa:**
+```json
+{
+  "id": "441f6404-8138-428c-9e32-6841da2c3052",
+  "title": "Terraza Test",
+  "hostId": "f40b66f1-9d32-4dab-b098-4b518eab0eb0",
+  "active": true
+}
+```
+
+**Logs confirmando roles extraídos:**
+```
+Granted Authorities=[ROLE_USER, ROLE_HOST]
+```
+
+---
+
 ### 9. Commit y Push
 
 ```bash
 git add -A
 git commit -m "feat(backend): Backend completamente funcional con autenticación JWT"
+git push origin feature/backend-setup
+
+# Commit adicional para fix de roles
+git commit -m "fix: Custom KeycloakRealmRoleConverter para extraccion correcta de roles JWT"
 git push origin feature/backend-setup
 ```
 
