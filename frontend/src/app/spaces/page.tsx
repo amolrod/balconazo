@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Search, MapPin, DollarSign, Users, Loader2 } from 'lucide-react'
 import { SpaceCard } from '@/components/spaces/SpaceCard'
 import { spacesApi, type Space, type SpaceFilters } from '@/lib/api'
 
-export default function SpacesPage() {
+function SpacesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -257,5 +257,22 @@ export default function SpacesPage() {
         )}
       </div>
     </div>
+  )
+}
+
+function SpacesLoadingFallback() {
+  return (
+    <div className="min-h-screen bg-secondary-50 flex items-center justify-center">
+      <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+      <span className="ml-2 text-secondary-600">Cargando...</span>
+    </div>
+  )
+}
+
+export default function SpacesPage() {
+  return (
+    <Suspense fallback={<SpacesLoadingFallback />}>
+      <SpacesContent />
+    </Suspense>
   )
 }

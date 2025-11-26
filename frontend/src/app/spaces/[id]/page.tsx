@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { MapPin, Users, Clock, Check, ArrowLeft, Loader2 } from 'lucide-react'
+import { MapPin, Users, Check, ArrowLeft, Loader2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth/AuthProvider'
-import { spacesApi, bookingsApi, type SpaceDetail, type BookedSlot } from '@/lib/api'
+import { spacesApi, bookingsApi, type SpaceDetail } from '@/lib/api'
 
 export default function SpaceDetailPage() {
   const params = useParams()
@@ -13,7 +13,6 @@ export default function SpaceDetailPage() {
   const { isAuthenticated, token, login } = useAuth()
 
   const [space, setSpace] = useState<SpaceDetail | null>(null)
-  const [bookedSlots, setBookedSlots] = useState<BookedSlot[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -38,17 +37,18 @@ export default function SpaceDetailPage() {
         const spaceData = await spacesApi.getById(spaceId)
         setSpace(spaceData)
 
+        // TODO: Implementar visualización de disponibilidad
         // Obtener disponibilidad para los próximos 30 días
         const today = new Date()
         const endDate = new Date(today)
         endDate.setDate(endDate.getDate() + 30)
 
-        const slots = await bookingsApi.getAvailability(
+        // Precargar disponibilidad (se usará en futuras versiones)
+        await bookingsApi.getAvailability(
           spaceId,
           today.toISOString().split('T')[0],
           endDate.toISOString().split('T')[0]
         )
-        setBookedSlots(slots)
       } catch (err) {
         setError('Error al cargar el espacio')
         console.error(err)

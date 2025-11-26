@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Calendar, MapPin, Clock, Loader2, AlertCircle } from 'lucide-react'
+import { Calendar, Clock, Loader2, AlertCircle } from 'lucide-react'
 import { useAuth } from '@/lib/auth/AuthProvider'
 import { bookingsApi, type Booking, type BookingStatus } from '@/lib/api'
 

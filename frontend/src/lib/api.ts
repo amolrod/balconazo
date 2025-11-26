@@ -21,9 +21,14 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const { token, ...fetchOptions } = options
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(options.headers || {}),
+  }
+
+  // Merge existing headers
+  if (options.headers) {
+    const existingHeaders = options.headers as Record<string, string>
+    Object.assign(headers, existingHeaders)
   }
 
   if (token) {
