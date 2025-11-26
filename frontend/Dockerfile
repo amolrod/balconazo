@@ -1,27 +1,37 @@
-FROM node:20-alpine AS deps
+# ================================
+# Stage 1: Install dependencies
+# ================================
+FROM oven/bun:1.1-alpine AS deps
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json bun.lockb* ./
+RUN bun install --frozen-lockfile
 
-FROM node:20-alpine AS builder
+# ================================
+# Stage 2: Build the application
+# ================================
+FROM oven/bun:1.1-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
-RUN npm run build
+RUN bun --bun run build
 
-FROM node:20-alpine AS runner
+# ================================
+# Stage 3: Production runner
+# ================================
+FROM oven/bun:1.1-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -31,10 +41,10 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
-CMD ["node", "server.js"]
+CMD ["bun", "run", "server.js"]
