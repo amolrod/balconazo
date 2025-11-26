@@ -104,15 +104,16 @@ curl -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:8080/api/users/me
 curl http://localhost:8080/api/spaces
 ```
 
-## Documentación
+## Documentacion
 
-Consulta la carpeta `docs/` para guías detalladas:
+Consulta la carpeta `docs/` para guias detalladas:
 
 - [Arquitectura del Sistema](docs/ARCHITECTURE.md)
-- [Documentación de APIs](docs/API_DOCUMENTATION.md)
-- [Configuración de Keycloak](docs/KEYCLOAK_CONFIG.md)
-- [Guía de Desarrollo Backend](docs/BACKEND_DEVELOPMENT_GUIDE.md)
-- [Guía de Desarrollo Frontend](docs/FRONTEND_DEVELOPMENT_GUIDE.md)
+- [Documentacion de APIs](docs/API_DOCUMENTATION.md)
+- [Referencia Completa de Endpoints](docs/API_ENDPOINTS.md)
+- [Configuracion de Keycloak](docs/KEYCLOAK_CONFIG.md)
+- [Guia de Desarrollo Backend](docs/BACKEND_DEVELOPMENT_GUIDE.md)
+- [Guia de Desarrollo Frontend](docs/FRONTEND_DEVELOPMENT_GUIDE.md)
 - [Roadmap del Proyecto](docs/PROJECT_ROADMAP.md)
 
 ## Diario de Desarrollo (TFG)
