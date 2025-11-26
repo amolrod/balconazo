@@ -1,0 +1,37 @@
+# Maven / Java
+target/
+*.log
+*.class
+*.jar
+*.war
+*.iml
+*.ipr
+*.iws
+.idea/
+*.swp
+
+# Node / Next.js
+node_modules/
+.next/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+
+# Docker
+*.pid
+*.seed
+docker/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# VSCode
+.vscode/

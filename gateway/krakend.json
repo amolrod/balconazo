@@ -1,0 +1,329 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "name": "balconazo-gateway",
+  "port": 8080,
+  "timeout": "30s",
+  "cache_ttl": "0s",
+  "output_encoding": "json",
+  "extra_config": {
+    "security/cors": {
+      "allow_origins": ["http://localhost:3000"],
+      "allow_methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "allow_headers": ["Origin", "Authorization", "Content-Type", "Accept", "X-Requested-With"],
+      "expose_headers": ["Content-Length", "Content-Type"],
+      "allow_credentials": true,
+      "max_age": "12h"
+    },
+    "router": {
+      "return_error_msg": true
+    },
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    }
+  },
+  "endpoints": [
+    {
+      "@comment": "Health check endpoint",
+      "endpoint": "/__health",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/__health",
+          "host": ["http://localhost:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "@comment": "=== USERS SERVICE ===",
+      "endpoint": "/api/users/me",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/users/me",
+          "host": ["http://users-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/users/me",
+      "method": "PUT",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/users/me",
+          "host": ["http://users-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "@comment": "=== SPACES SERVICE ===",
+      "endpoint": "/api/spaces",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_query_strings": ["city", "minPrice", "maxPrice", "capacity", "page", "size", "sort"],
+      "backend": [
+        {
+          "url_pattern": "/spaces",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/spaces/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/spaces/{id}",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/spaces",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "roles_key": "realm_access.roles",
+          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/spaces",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/spaces/{id}",
+      "method": "PUT",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "roles_key": "realm_access.roles",
+          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/spaces/{id}",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/spaces/{id}",
+      "method": "DELETE",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "roles_key": "realm_access.roles",
+          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/spaces/{id}",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/spaces/my",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "input_query_strings": ["page", "size"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "roles_key": "realm_access.roles",
+          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/spaces/my",
+          "host": ["http://spaces-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "@comment": "=== BOOKINGS SERVICE ===",
+      "endpoint": "/api/bookings",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/bookings",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/bookings/me",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "input_query_strings": ["page", "size", "status"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/bookings/me",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/bookings/host",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "input_query_strings": ["page", "size", "status"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true,
+          "roles_key": "realm_access.roles",
+          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/bookings/host",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/bookings/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/bookings/{id}",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/bookings/{id}/cancel",
+      "method": "PUT",
+      "output_encoding": "json",
+      "input_headers": ["Authorization", "Content-Type"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
+          "cache": true,
+          "disable_jwk_security": true
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/bookings/{id}/cancel",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/bookings/space/{spaceId}/availability",
+      "method": "GET",
+      "output_encoding": "json",
+      "input_query_strings": ["startDate", "endDate"],
+      "backend": [
+        {
+          "url_pattern": "/bookings/space/{spaceId}/availability",
+          "host": ["http://bookings-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    }
+  ]
+}
