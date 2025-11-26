@@ -114,9 +114,7 @@
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
-          "disable_jwk_security": true,
-          "roles_key": "realm_access.roles",
-          "roles": ["ROLE_HOST", "ROLE_ADMIN"]
+          "disable_jwk_security": true
         }
       },
       "backend": [
