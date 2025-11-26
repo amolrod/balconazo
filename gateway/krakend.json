@@ -16,7 +16,8 @@
       "max_age": "12h"
     },
     "router": {
-      "return_error_msg": true
+      "return_error_msg": true,
+      "health_path": "/__health"
     },
     "telemetry/logging": {
       "level": "DEBUG",
@@ -26,19 +27,6 @@
     }
   },
   "endpoints": [
-    {
-      "@comment": "Health check endpoint",
-      "endpoint": "/__health",
-      "method": "GET",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/__health",
-          "host": ["http://localhost:8080"],
-          "encoding": "json"
-        }
-      ]
-    },
     {
       "@comment": "=== USERS SERVICE ===",
       "endpoint": "/api/users/me",
@@ -50,15 +38,22 @@
           "alg": "RS256",
           "jwk_url": "http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs",
           "cache": true,
+          "cache_duration": 3600,
           "disable_jwk_security": true,
-          "operation_debug": true
+          "operation_debug": true,
+          "propagate_claims": [["sub", "x-user-id"], ["preferred_username", "x-user-name"]]
         }
       },
       "backend": [
         {
           "url_pattern": "/users/me",
           "host": ["http://users-service:8080"],
-          "encoding": "json"
+          "encoding": "json",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend_error"
+            }
+          }
         }
       ]
     },

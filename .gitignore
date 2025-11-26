@@ -35,3 +35,7 @@ Thumbs.db
 
 # VSCode
 .vscode/
+
+# PostgreSQL data
+infra/db/*/
+infra/db/**/*

@@ -5,6 +5,7 @@ import com.balconazo.spaces.model.Space;
 import com.balconazo.spaces.model.SpaceFeature;
 import com.balconazo.spaces.model.SpacePhoto;
 import com.balconazo.spaces.repository.SpaceRepository;
+import com.balconazo.spaces.repository.SpaceSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,11 +31,8 @@ public class SpaceService {
     public Page<SpaceSummaryDto> listSpaces(SpaceFilter filter, Pageable pageable) {
         log.debug("Listando espacios con filtros: {}", filter);
 
-        Page<Space> spaces = spaceRepository.findWithFilters(
-                filter.getCity(),
-                filter.getMinPrice(),
-                filter.getMaxPrice(),
-                filter.getCapacity(),
+        Page<Space> spaces = spaceRepository.findAll(
+                SpaceSpecification.withFilters(filter),
                 pageable
         );
 
