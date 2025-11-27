@@ -59,7 +59,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/balconazo
+          issuer-uri: http://localhost:8081/realms/balconazo
           jwk-set-uri: http://keycloak:8080/realms/balconazo/protocol/openid-connect/certs
 
 ---

@@ -1,28 +1,24 @@
-# **API_DOCUMENTATION.md**
+# API_DOCUMENTATION.md
 
-Documentación de APIs – BalconazoApp
+Documentacion de APIs - BalconazoApp
 
 ---
 
-## **Índice**
+## Indice
 
-1. [Introducción](#1-introducción)
-
+1. [Introduccion](#1-introduccion)
 2. [Convenciones generales](#2-convenciones-generales)
-
-3. [Autenticación y seguridad](#3-autenticación-y-seguridad)
-
+3. [Autenticacion y seguridad](#3-autenticacion-y-seguridad)
 4. [API de usuarios (users-service)](#4-api-de-usuarios-users-service)
-
 5. [API de espacios (spaces-service)](#5-api-de-espacios-spaces-service)
-
 6. [API de reservas (bookings-service)](#6-api-de-reservas-bookings-service)
-
 7. [Formato de errores](#7-formato-de-errores)
-
 8. [Ejemplos completos con curl](#8-ejemplos-completos-con-curl)
-
 9. [Troubleshooting API](#9-troubleshooting-api)
+
+---
+
+> **NOTA**: Para documentacion detallada de TODOS los endpoints con ejemplos completos de request/response, ver [API_ENDPOINTS.md](./API_ENDPOINTS.md)
 
 ---
 

@@ -4,7 +4,7 @@
   "displayName": "BalconazoApp",
   "displayNameHtml": "<strong>BalconazoApp</strong>",
   "enabled": true,
-  "sslRequired": "external",
+  "sslRequired": "none",
   "registrationAllowed": true,
   "loginWithEmailAllowed": true,
   "duplicateEmailsAllowed": false,

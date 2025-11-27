@@ -87,10 +87,13 @@ public class UserService {
             roleRepository.findByName("ROLE_USER").ifPresent(roles::add);
         }
 
+        // Usar keycloakId como parte del email si no hay email en el token
+        String userEmail = email != null ? email : keycloakId + "@balconazo.local";
+
         User user = User.builder()
                 .id(UUID.randomUUID())
                 .keycloakId(keycloakId)
-                .email(email != null ? email : "unknown@balconazo.local")
+                .email(userEmail)
                 .name(name != null ? name : "Usuario")
                 .surname(surname != null ? surname : "Nuevo")
                 .roles(roles)
