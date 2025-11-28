@@ -2,12 +2,25 @@
 
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth/AuthProvider'
-import { Menu, X, User } from 'lucide-react'
-import { useState } from 'react'
+import { Menu, X, User, ChevronDown } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
 
 export function Header() {
   const { user, isAuthenticated, login, logout, isLoading } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <header className="bg-white shadow-sm border-b border-secondary-200">
@@ -50,21 +63,56 @@ export function Header() {
             {isLoading ? (
               <div className="w-8 h-8 rounded-full bg-secondary-200 animate-pulse" />
             ) : isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 hover:bg-secondary-100 rounded-lg px-3 py-2 transition-colors"
+                >
                   <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
                     <User className="w-5 h-5 text-primary-600" />
                   </div>
                   <span className="text-sm font-medium text-secondary-900">
                     {user?.name || 'Usuario'}
                   </span>
-                </div>
-                <button
-                  onClick={logout}
-                  className="btn btn-outline px-4 py-2"
-                >
-                  Cerrar sesión
+                  <ChevronDown className={`w-4 h-4 text-secondary-500 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
+
+                {/* Dropdown menu */}
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-secondary-200 py-2 z-50">
+                    <Link
+                      href="/account/profile"
+                      className="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Mi perfil
+                    </Link>
+                    <Link
+                      href="/account/bookings"
+                      className="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Mis reservas
+                    </Link>
+                    <Link
+                      href="/account/spaces"
+                      className="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      Mis espacios
+                    </Link>
+                    <hr className="my-2 border-secondary-200" />
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false)
+                        logout()
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-2">

@@ -27,19 +27,6 @@
   },
   "endpoints": [
     {
-      "@comment": "Health check endpoint",
-      "endpoint": "/__health",
-      "method": "GET",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/__health",
-          "host": ["http://localhost:8080"],
-          "encoding": "json"
-        }
-      ]
-    },
-    {
       "@comment": "=== USERS SERVICE ===",
       "endpoint": "/api/users/me",
       "method": "GET",
