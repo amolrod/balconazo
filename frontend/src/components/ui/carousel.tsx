@@ -106,16 +106,19 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
         {/* Content - centered title and button */}
         <article className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${isActive ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold relative mb-6">
+          <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold relative">
             {title}
           </h2>
           <div className="flex justify-center">
-            <button className="w-32 h-10 flex items-center justify-center gap-2 text-xs font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full hover:bg-white/30 transition duration-300">
+            <button 
+              className="mt-6 flex items-center gap-3 font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full hover:bg-white/30 transition duration-300"
+              style={{ padding: '6px 16px', fontSize: '14px' }}
+            >
               Explorar
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                width="14" 
-                height="14" 
+                width="20" 
+                height="20" 
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
@@ -172,7 +175,9 @@ interface CarouselProps {
 
 export default function Carousel({ slides, onLoadMore, hasMore = false }: CarouselProps) {
   const [current, setCurrent] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
   const id = useId();
+  const ulRef = useRef<HTMLUListElement>(null);
 
   // Load more when reaching slide 5 (or near the end)
   useEffect(() => {
@@ -180,6 +185,27 @@ export default function Carousel({ slides, onLoadMore, hasMore = false }: Carous
       onLoadMore();
     }
   }, [current, slides.length, hasMore, onLoadMore]);
+
+  // Calculate real pixel offset to center the current slide
+  useEffect(() => {
+    if (!ulRef.current) return;
+    
+    const slideElements = ulRef.current.querySelectorAll(':scope > div');
+    if (slideElements.length === 0) return;
+    
+    // Get the current slide element
+    const currentSlide = slideElements[current] as HTMLElement;
+    if (!currentSlide) return;
+    
+    // Calculate offset: slide's center position relative to ul start
+    const slideRect = currentSlide.getBoundingClientRect();
+    
+    // Distance from ul start to slide center
+    const slideCenter = currentSlide.offsetLeft + (slideRect.width / 2);
+    
+    // We want this to be at center (0), so we translate by negative of slideCenter
+    setTranslateX(-slideCenter);
+  }, [current, slides.length]);
 
   const handlePreviousClick = () => {
     const previous = current - 1;
@@ -197,10 +223,6 @@ export default function Carousel({ slides, onLoadMore, hasMore = false }: Carous
     }
   };
 
-  // Calculate translateX to center the current slide
-  const slideWidth = 78; // 70vmin + 8vmin margins
-  const translateX = -current * slideWidth;
-
   return (
     <div
       className="relative w-full h-[70vmin]"
@@ -209,9 +231,10 @@ export default function Carousel({ slides, onLoadMore, hasMore = false }: Carous
       {/* Slides container with overflow hidden */}
       <div className="absolute inset-0 overflow-hidden">
         <ul
+          ref={ulRef}
           className="absolute left-1/2 h-full flex items-center transition-transform duration-700 ease-out"
           style={{ 
-            transform: `translateX(calc(-35vmin + ${translateX}vmin))` 
+            transform: `translateX(${translateX}px)` 
           }}
         >
           {slides.map((slide, index) => (

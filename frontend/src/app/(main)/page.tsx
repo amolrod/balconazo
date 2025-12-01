@@ -22,7 +22,6 @@ import {
   Building 
 } from "lucide-react";
 import { spacesApi, Space } from "@/lib/api";
-import { PinContainer } from "@/components/ui/3d-pin";
 import Carousel from "@/components/ui/carousel";
 
 // Categorías con iconos de Lucide
@@ -370,60 +369,33 @@ export default function HomePage() {
             <p>La plataforma más segura y sencilla para alquilar espacios</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-8 py-10">
+          <div className="why-grid">
             {/* Card 1 - Pago seguro */}
-            <PinContainer title="Transacciones protegidas">
-              <div className="flex flex-col p-4 tracking-tight text-slate-100/50 w-[18rem] h-[18rem]">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center mb-4">
-                  <Lock size={24} className="text-white" />
-                </div>
-                <h3 className="max-w-xs !pb-2 !m-0 font-bold text-lg text-slate-100">
-                  Pago seguro
-                </h3>
-                <div className="text-sm !m-0 !p-0 font-normal">
-                  <span className="text-slate-400">
-                    Todas las transacciones están protegidas con encriptación de nivel bancario. Tu dinero está seguro.
-                  </span>
-                </div>
-                <div className="flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br from-rose-500 via-pink-500 to-red-500" />
+            <div className="why-card">
+              <div className="why-icon icon-rose">
+                <Lock size={32} />
               </div>
-            </PinContainer>
+              <h3>Pago seguro</h3>
+              <p>Todas las transacciones están protegidas con encriptación de nivel bancario. Tu dinero está seguro.</p>
+            </div>
 
             {/* Card 2 - Espacios verificados */}
-            <PinContainer title="Calidad garantizada">
-              <div className="flex flex-col p-4 tracking-tight text-slate-100/50 w-[18rem] h-[18rem]">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-4">
-                  <CheckCircle size={24} className="text-white" />
-                </div>
-                <h3 className="max-w-xs !pb-2 !m-0 font-bold text-lg text-slate-100">
-                  Espacios verificados
-                </h3>
-                <div className="text-sm !m-0 !p-0 font-normal">
-                  <span className="text-slate-400">
-                    Todos los espacios pasan por un proceso de verificación para garantizar calidad y seguridad.
-                  </span>
-                </div>
-                <div className="flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500" />
+            <div className="why-card">
+              <div className="why-icon icon-green">
+                <CheckCircle size={32} />
               </div>
-            </PinContainer>
+              <h3>Espacios verificados</h3>
+              <p>Todos los espacios pasan por un proceso de verificación para garantizar calidad y seguridad.</p>
+            </div>
 
             {/* Card 3 - Soporte 24/7 */}
-            <PinContainer title="Siempre disponibles">
-              <div className="flex flex-col p-4 tracking-tight text-slate-100/50 w-[18rem] h-[18rem]">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4">
-                  <Headphones size={24} className="text-white" />
-                </div>
-                <h3 className="max-w-xs !pb-2 !m-0 font-bold text-lg text-slate-100">
-                  Soporte 24/7
-                </h3>
-                <div className="text-sm !m-0 !p-0 font-normal">
-                  <span className="text-slate-400">
-                    Nuestro equipo está disponible las 24 horas para ayudarte con cualquier consulta o problema.
-                  </span>
-                </div>
-                <div className="flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500" />
+            <div className="why-card">
+              <div className="why-icon icon-blue">
+                <Headphones size={32} />
               </div>
-            </PinContainer>
+              <h3>Soporte 24/7</h3>
+              <p>Nuestro equipo está disponible las 24 horas para ayudarte con cualquier consulta o problema.</p>
+            </div>
           </div>
         </div>
       </section>
