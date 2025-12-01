@@ -261,21 +261,6 @@ export default function HomePage() {
           ============================================ */}
       <section className="section-padding featured-section">
         <div className="container-full">
-          {/* Section Header */}
-          <div className="section-header">
-            <div>
-              <h2>
-                {activeCategory === "todos" ? "Espacios destacados" : `Espacios: ${categories.find(c => c.id === activeCategory)?.label}`}
-              </h2>
-              <p>
-                {isLoading 
-                  ? "Cargando espacios..." 
-                  : `${spaces.length} de ${totalSpaces} espacios`
-                }
-              </p>
-            </div>
-          </div>
-
           {/* Loading State */}
           {isLoading && (
             <div className="spaces-grid">
@@ -319,11 +304,11 @@ export default function HomePage() {
 
           {/* Spaces Grid */}
           {!isLoading && !error && spaces.length > 0 && (
-            <div className="relative overflow-hidden w-full h-full py-20 flex justify-center items-center">
+            <div className="relative overflow-hidden w-full h-full py-20">
               <Carousel 
                 slides={spaces.map(space => ({
                   title: space.title,
-                  button: "Ver detalles",
+                  button: "Explore Component",
                   src: space.thumbnailUrl || space.images?.[0] || "/placeholder-space.jpg"
                 }))} 
               />
