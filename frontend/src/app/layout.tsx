@@ -1,38 +1,29 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Providers } from '@/components/providers'
-import { Header } from '@/components/layout/Header'
-
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'BalconazoApp - Alquiler de espacios por horas',
-  description: 'Marketplace de alquiler de terrazas, balcones, jardines y salones entre particulares.',
-}
+  title: "Balconazo - Alquila espacios únicos por horas",
+  description: "Descubre terrazas, jardines y salones exclusivos por horas. Reserva de forma segura y sin complicaciones.",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="es">
-      <body className={inter.className}>
-        <Providers>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <footer className="bg-secondary-900 text-white py-8">
-              <div className="container mx-auto px-4 text-center">
-                <p>&copy; 2025 BalconazoApp. Todos los derechos reservados.</p>
-              </div>
-            </footer>
-          </div>
-        </Providers>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
+      <body>
+        {children}
       </body>
     </html>
-  )
+  );
 }
