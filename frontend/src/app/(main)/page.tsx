@@ -1,28 +1,36 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import { 
   Search, 
   MapPin, 
   Calendar, 
   Users,
-  Home,
-  Sun,
-  TreePine,
-  Building2,
-  Sofa,
-  Waves,
-  Sparkles,
-  Fence,
-  Lock,
-  CheckCircle,
-  Headphones,
-  ArrowRight,
-  AlertCircle,
-  Building
+  Home, 
+  Sun, 
+  TreePine, 
+  Building2, 
+  Sofa, 
+  Waves, 
+  Sparkles, 
+  Fence, 
+  Lock, 
+  CheckCircle, 
+  Headphones, 
+  ArrowRight, 
+  AlertCircle, 
+  Building 
 } from "lucide-react";
-import SpaceCard from "@/components/SpaceCard";
 import { spacesApi, Space } from "@/lib/api";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 // Categorías con iconos de Lucide
 const categories = [
@@ -259,15 +267,15 @@ export default function HomePage() {
       {/* ============================================
           FEATURED SPACES GRID
           ============================================ */}
-      <section className="section-padding" style={{ background: 'white' }}>
+      <section className="section-padding featured-section">
         <div className="container-full">
           {/* Section Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="section-header">
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+              <h2>
                 {activeCategory === "todos" ? "Espacios destacados" : `Espacios: ${categories.find(c => c.id === activeCategory)?.label}`}
               </h2>
-              <p style={{ color: '#64748b' }}>
+              <p>
                 {isLoading 
                   ? "Cargando espacios..." 
                   : `${spaces.length} de ${totalSpaces} espacios`
@@ -292,7 +300,7 @@ export default function HomePage() {
           {/* Error State */}
           {error && !isLoading && (
             <div className="error-state">
-              <AlertCircle size={48} style={{ margin: '0 auto 16px', color: '#dc2626' }} />
+              <AlertCircle size={48} style={{ margin: '0 auto 16px', color: 'var(--destructive)' }} />
               <h3>Error al cargar espacios</h3>
               <p>{error}</p>
               <button className="btn-retry" onClick={() => fetchSpaces(activeCategory)}>
@@ -319,10 +327,67 @@ export default function HomePage() {
 
           {/* Spaces Grid */}
           {!isLoading && !error && spaces.length > 0 && (
-            <div className="spaces-grid">
-              {spaces.map((space, index) => (
-                <SpaceCard key={space.id} space={space} index={index} />
-              ))}
+            <div className="w-full px-4">
+              <Carousel
+                plugins={[
+                  Autoplay({
+                    delay: 4000,
+                  }),
+                ]}
+                className="w-full mx-auto"
+              >
+                <CarouselContent className="-ml-4">
+                  {spaces.map((space, index) => (
+                    <CarouselItem key={space.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                      <div className="relative h-[500px] w-full overflow-hidden rounded-2xl group cursor-pointer border border-border">
+                        <Image
+                          src={space.thumbnailUrl || space.images?.[0] || "/placeholder-space.jpg"}
+                          alt={space.title}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/90" />
+                        <div className="absolute bottom-0 left-0 p-6 text-white w-full transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+                          <div className="mb-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                            <span className="px-2.5 py-1 text-xs font-bold bg-white/20 backdrop-blur-md rounded-full border border-white/30">
+                              {space.category || "Espacio"}
+                            </span>
+                            <div className="flex items-center gap-1 text-xs font-bold text-yellow-400 bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                              <span>★</span>
+                              {space.rating || "New"}
+                            </div>
+                          </div>
+                          
+                          <h3 className="text-2xl font-bold mb-2 leading-tight">{space.title}</h3>
+                          
+                          <p className="text-gray-300 mb-4 flex items-center gap-2 text-sm font-medium">
+                            <MapPin size={16} className="text-rose-500" />
+                            {space.city}
+                          </p>
+                          
+                          <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/20">
+                            <div className="flex flex-col">
+                              <span className="text-xs text-gray-400 uppercase tracking-wider font-bold">Precio</span>
+                              <span className="text-xl font-bold">{space.pricePerHour}€ <span className="text-sm font-normal text-gray-400">/ hora</span></span>
+                            </div>
+                            <button className="px-5 py-2.5 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm">
+                              Ver detalles
+                              <ArrowRight size={16} />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* Favorite Button Overlay */}
+                        <button className="absolute top-4 right-4 p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 translate-y-[-10px] group-hover:translate-y-0 duration-300">
+                          <Sparkles size={18} />
+                        </button>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex -left-4 bg-background/80 backdrop-blur-sm border-border hover:bg-background" />
+                <CarouselNext className="hidden md:flex -right-4 bg-background/80 backdrop-blur-sm border-border hover:bg-background" />
+              </Carousel>
             </div>
           )}
 

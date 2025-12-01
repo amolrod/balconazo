@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { User, LogIn, UserPlus, Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,8 +60,11 @@ export default function Header() {
           </li>
         </ul>
 
-        {/* User Menu */}
-        <div className="user-menu-wrapper" ref={menuRef}>
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+
+          {/* User Menu */}
+          <div className="user-menu-wrapper" ref={menuRef}>
           <button 
             className="user-menu-trigger"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -124,6 +128,7 @@ export default function Header() {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </nav>

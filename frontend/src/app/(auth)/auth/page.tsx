@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, AlertCircle, Home } from "lucide-react";
+import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Particles } from "@/components/ui/particles";
+import { ShineBorder } from "@/components/ui/shine-border";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -177,39 +181,71 @@ export default function AuthPage() {
 
   return (
     <div className={`auth-container ${!isLogin ? 'register-mode' : ''}`}>
-      {/* Columna Branding (Desktop only) */}
+      {/* Panel de Branding - ESPECTACULAR */}
       <div className="auth-branding">
-        <div className="auth-branding-content">
-          <div className="auth-branding-icon">
-            <Home size={40} color="white" />
+        <div className="absolute top-4 right-4 z-50">
+          <ModeToggle className="text-white hover:bg-white/20 hover:text-white" />
+        </div>
+        {/* Fondo con gradiente animado */}
+        <div className="brand-bg-gradient"></div>
+        
+        {/* Partículas interactivas de fondo */}
+        <Particles
+          className="absolute inset-0 z-10"
+          quantity={150}
+          ease={80}
+          color="#ffffff"
+          refresh
+        />
+        
+        {/* Logo gigante de fondo (marca de agua) */}
+        <div className="brand-bg-logo-watermark">
+          <Image 
+            src="/logo.png" 
+            alt="" 
+            width={800} 
+            height={800}
+            className="watermark-img"
+          />
+        </div>
+        
+        {/* CONTENIDO CENTRAL */}
+        <div className="brand-hero-content">
+          {/* Texto animado */}
+          <div className="brand-hero-text">
+            <h2 className="brand-hero-title">
+              {isLogin ? "¡Hola de nuevo!" : "¡Únete ahora!"}
+            </h2>
+            <p className="brand-hero-subtitle">
+              Descubre espacios únicos
+            </p>
           </div>
-          <h1 className="auth-branding-title">Balconazo</h1>
-          <p className="auth-branding-subtitle">
-            {isLogin 
-              ? "Descubre espacios únicos para tus eventos. Terrazas, jardines y salones exclusivos te esperan."
-              : "Únete a miles de usuarios que ya disfrutan de espacios únicos para sus eventos y celebraciones."
-            }
-          </p>
         </div>
       </div>
 
       {/* Columna Formularios */}
-      <div className="auth-content">
+      <div className="auth-content relative">
+        <div className="absolute top-4 right-4 lg:hidden">
+          <ModeToggle />
+        </div>
         <div className="auth-content-inner">
-          {/* Logo (mobile) */}
-          <div className="auth-logo">
-            <h1 className="auth-logo-text">Balconazo</h1>
-            <p className="auth-logo-subtitle">
-              {isLogin ? "Inicia sesión en tu cuenta" : "Crea tu cuenta"}
-            </p>
+          {/* Logo solo visible en mobile */}
+          <div className="auth-logo-mobile">
+            <Image 
+              src="/logo.png" 
+              alt="Balconazo" 
+              width={50} 
+              height={50}
+              className="auth-logo-img"
+            />
           </div>
 
-          {/* Container de formularios con animación de slide */}
-          <div className="auth-forms-wrapper">
-            <div className={`auth-forms-slider ${!isLogin ? 'show-register' : ''}`}>
+          {/* Container de formularios con animación crossfade */}
+          <div className={`auth-forms-wrapper ${!isLogin ? 'show-register' : ''}`}>
               {/* LOGIN FORM */}
               <div className="auth-form-panel">
-              <div className="auth-card">
+              <div className="auth-card relative overflow-hidden">
+                <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
                 <div className="auth-card-header">
                   <h2 className="auth-card-title">Bienvenido de nuevo</h2>
                   <p className="auth-card-subtitle">Ingresa tus datos para continuar</p>
@@ -315,7 +351,8 @@ export default function AuthPage() {
 
               {/* REGISTER FORM */}
               <div className="auth-form-panel">
-              <div className="auth-card">
+              <div className="auth-card relative overflow-hidden">
+                <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
                 <div className="auth-card-header">
                   <h2 className="auth-card-title">Únete a Balconazo</h2>
                   <p className="auth-card-subtitle">Descubre espacios únicos en tu ciudad</p>
@@ -481,7 +518,6 @@ export default function AuthPage() {
                 </form>
               </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
