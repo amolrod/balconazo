@@ -319,7 +319,7 @@ export default function HomePage() {
 
           {/* Spaces Grid */}
           {!isLoading && !error && spaces.length > 0 && (
-            <div className="relative overflow-hidden w-full h-full py-20">
+            <div className="relative overflow-hidden w-full h-full py-20 flex justify-center items-center">
               <Carousel 
                 slides={spaces.map(space => ({
                   title: space.title,
