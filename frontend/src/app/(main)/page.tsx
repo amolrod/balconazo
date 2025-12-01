@@ -42,6 +42,9 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalSpaces, setTotalSpaces] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasMoreSpaces, setHasMoreSpaces] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   
   // Estados para el category bar
   const [isCategoryBarFixed, setIsCategoryBarFixed] = useState(false);
@@ -104,32 +107,56 @@ export default function HomePage() {
   }, [handleScroll]);
 
   // Fetch spaces from API
-  const fetchSpaces = async (category?: string) => {
-    setIsLoading(true);
+  const fetchSpaces = async (category?: string, page: number = 0, append: boolean = false) => {
+    if (append) {
+      setIsLoadingMore(true);
+    } else {
+      setIsLoading(true);
+    }
     setError(null);
     
     try {
       const filters = {
-        size: 8,
-        page: 0,
+        size: 6, // 6 spaces per load
+        page,
         ...(category && category !== "todos" ? { category } : {}),
       };
       
       const response = await spacesApi.getAll(filters);
-      setSpaces(response.content);
+      
+      if (append) {
+        setSpaces(prev => [...prev, ...response.content]);
+      } else {
+        setSpaces(response.content);
+      }
+      
       setTotalSpaces(response.totalElements);
+      setCurrentPage(page);
+      setHasMoreSpaces(!response.last);
     } catch (err) {
       console.error("Error fetching spaces:", err);
       setError("No se pudieron cargar los espacios. Verifica que el backend esté funcionando.");
-      setSpaces([]);
+      if (!append) {
+        setSpaces([]);
+      }
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
+  // Load more spaces
+  const loadMoreSpaces = useCallback(() => {
+    if (!isLoadingMore && hasMoreSpaces) {
+      fetchSpaces(activeCategory, currentPage + 1, true);
+    }
+  }, [activeCategory, currentPage, isLoadingMore, hasMoreSpaces]);
+
   // Initial load and category change
   useEffect(() => {
-    fetchSpaces(activeCategory);
+    setCurrentPage(0);
+    setHasMoreSpaces(true);
+    fetchSpaces(activeCategory, 0, false);
   }, [activeCategory]);
 
   const handleCategoryClick = (categoryId: string) => {
@@ -304,13 +331,19 @@ export default function HomePage() {
 
           {/* Spaces Grid */}
           {!isLoading && !error && spaces.length > 0 && (
-            <div className="relative overflow-hidden w-full h-full py-20">
+            <div className="relative w-full py-20 pb-40">
               <Carousel 
                 slides={spaces.map(space => ({
+                  id: space.id,
                   title: space.title,
-                  button: "Explore Component",
-                  src: space.thumbnailUrl || space.images?.[0] || "/placeholder-space.jpg"
-                }))} 
+                  src: space.thumbnailUrl || space.images?.[0] || "/placeholder-space.jpg",
+                  city: space.city,
+                  pricePerHour: space.pricePerHour,
+                  capacity: space.capacity,
+                  rating: space.rating
+                }))}
+                onLoadMore={loadMoreSpaces}
+                hasMore={hasMoreSpaces}
               />
             </div>
           )}
