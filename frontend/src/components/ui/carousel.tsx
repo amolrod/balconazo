@@ -106,16 +106,16 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
 
         {/* Content - centered title and button */}
         <article className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${isActive ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-          <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold relative">
+          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold relative mb-6">
             {title}
           </h2>
           <div className="flex justify-center">
-            <button className="mt-6 flex items-center gap-3 px-8 py-4 text-base font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full hover:bg-white/30 transition duration-300">
+            <button className="w-32 h-10 flex items-center justify-center gap-2 text-xs font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full hover:bg-white/30 transition duration-300">
               Explorar
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                width="20" 
-                height="20" 
+                width="14" 
+                height="14" 
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
