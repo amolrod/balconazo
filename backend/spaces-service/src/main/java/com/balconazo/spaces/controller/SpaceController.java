@@ -32,16 +32,18 @@ public class SpaceController {
     @GetMapping
     public ResponseEntity<Page<SpaceSummaryDto>> listSpaces(
             @RequestParam(required = false) String city,
+            @RequestParam(required = false) String category,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) Integer capacity,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        log.debug("GET /spaces - Filtros: city={}, minPrice={}, maxPrice={}, capacity={}",
-                city, minPrice, maxPrice, capacity);
+        log.debug("GET /spaces - Filtros: city={}, category={}, minPrice={}, maxPrice={}, capacity={}",
+                city, category, minPrice, maxPrice, capacity);
 
         SpaceFilter filter = SpaceFilter.builder()
                 .city(city)
+                .category(category)
                 .minPrice(minPrice)
                 .maxPrice(maxPrice)
                 .capacity(capacity)

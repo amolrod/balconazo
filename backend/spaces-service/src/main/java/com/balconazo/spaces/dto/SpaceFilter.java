@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class SpaceFilter {
 
     private String city;
+    private String category;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private Integer capacity;

@@ -24,17 +24,20 @@ public interface SpaceRepository extends JpaRepository<Space, UUID>, JpaSpecific
 
     @Query(value = "SELECT * FROM spaces s WHERE s.active = true " +
            "AND (:city IS NULL OR LOWER(s.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
+           "AND (:category IS NULL OR LOWER(s.category) = LOWER(:category)) " +
            "AND (CAST(:minPrice AS numeric) IS NULL OR s.price_per_hour >= CAST(:minPrice AS numeric)) " +
            "AND (CAST(:maxPrice AS numeric) IS NULL OR s.price_per_hour <= CAST(:maxPrice AS numeric)) " +
            "AND (CAST(:capacity AS integer) IS NULL OR s.capacity >= CAST(:capacity AS integer))",
            countQuery = "SELECT COUNT(*) FROM spaces s WHERE s.active = true " +
            "AND (:city IS NULL OR LOWER(s.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
+           "AND (:category IS NULL OR LOWER(s.category) = LOWER(:category)) " +
            "AND (CAST(:minPrice AS numeric) IS NULL OR s.price_per_hour >= CAST(:minPrice AS numeric)) " +
            "AND (CAST(:maxPrice AS numeric) IS NULL OR s.price_per_hour <= CAST(:maxPrice AS numeric)) " +
            "AND (CAST(:capacity AS integer) IS NULL OR s.capacity >= CAST(:capacity AS integer))",
            nativeQuery = true)
     Page<Space> findWithFilters(
             @Param("city") String city,
+            @Param("category") String category,
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice,
             @Param("capacity") Integer capacity,

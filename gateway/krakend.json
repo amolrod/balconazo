@@ -89,7 +89,7 @@
       "endpoint": "/api/spaces",
       "method": "GET",
       "output_encoding": "json",
-      "input_query_strings": ["city", "minPrice", "maxPrice", "capacity", "page", "size", "sort"],
+      "input_query_strings": ["city", "category", "minPrice", "maxPrice", "capacity", "page", "size", "sort"],
       "backend": [
         {
           "url_pattern": "/spaces",

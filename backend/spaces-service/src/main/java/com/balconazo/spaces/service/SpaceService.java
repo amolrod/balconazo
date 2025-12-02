@@ -32,6 +32,7 @@ public class SpaceService {
 
         Page<Space> spaces = spaceRepository.findWithFilters(
                 filter.getCity(),
+                filter.getCategory(),
                 filter.getMinPrice(),
                 filter.getMaxPrice(),
                 filter.getCapacity(),
@@ -190,6 +191,7 @@ public class SpaceService {
                 .id(space.getId())
                 .title(space.getTitle())
                 .city(space.getCity())
+                .category(space.getCategory())
                 .capacity(space.getCapacity())
                 .pricePerHour(space.getPricePerHour())
                 .thumbnailUrl(space.getThumbnailUrl())

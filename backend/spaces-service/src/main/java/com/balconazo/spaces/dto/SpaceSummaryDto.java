@@ -17,6 +17,7 @@ public class SpaceSummaryDto {
     private UUID id;
     private String title;
     private String city;
+    private String category;
     private Integer capacity;
     private BigDecimal pricePerHour;
     private String thumbnailUrl;

@@ -49,6 +49,9 @@ public class Space {
     @Column(name = "price_per_hour", nullable = false, precision = 10, scale = 2)
     private BigDecimal pricePerHour;
 
+    @Column(length = 50)
+    private String category;
+
     @Column(nullable = false)
     @Builder.Default
     private Boolean active = true;
