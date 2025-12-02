@@ -2,6 +2,7 @@
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState, useRef, useId, useEffect } from "react";
 import { MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface SlideData {
   id: string;
@@ -18,9 +19,10 @@ interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
+  onExplore: (id: string) => void;
 }
 
-const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
+const Slide = ({ slide, index, current, handleSlideClick, onExplore }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
 
   const xRef = useRef(0);
@@ -113,6 +115,10 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             <button 
               className="mt-6 flex items-center gap-3 font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full hover:bg-white/30 transition duration-300"
               style={{ padding: '6px 16px', fontSize: '14px' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onExplore(slide.id);
+              }}
             >
               Explorar
               <svg 
@@ -178,6 +184,26 @@ export default function Carousel({ slides, onLoadMore, hasMore = false }: Carous
   const [translateX, setTranslateX] = useState(0);
   const id = useId();
   const ulRef = useRef<HTMLUListElement>(null);
+  const router = useRouter();
+
+  // Navigate to space detail page with space data
+  const handleExplore = (spaceId: string) => {
+    const space = slides.find(s => s.id === spaceId);
+    if (space) {
+      // Pass basic data via query params for now (backend detail endpoint has issues)
+      const params = new URLSearchParams({
+        title: space.title,
+        city: space.city,
+        price: String(space.pricePerHour),
+        capacity: String(space.capacity),
+        image: space.src,
+        ...(space.rating ? { rating: String(space.rating) } : {})
+      });
+      router.push(`/spaces/${spaceId}?${params.toString()}`);
+    } else {
+      router.push(`/spaces/${spaceId}`);
+    }
+  };
 
   // Load more when reaching slide 5 (or near the end)
   useEffect(() => {
@@ -244,6 +270,7 @@ export default function Carousel({ slides, onLoadMore, hasMore = false }: Carous
               index={index}
               current={current}
               handleSlideClick={handleSlideClick}
+              onExplore={handleExplore}
             />
           ))}
         </ul>

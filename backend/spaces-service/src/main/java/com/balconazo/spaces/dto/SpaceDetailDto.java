@@ -22,6 +22,8 @@ public class SpaceDetailDto {
     private String description;
     private String city;
     private String address;
+    private Double latitude;
+    private Double longitude;
     private Integer capacity;
     private BigDecimal pricePerHour;
     private Boolean active;

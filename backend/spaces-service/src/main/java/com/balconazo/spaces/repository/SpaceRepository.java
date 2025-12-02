@@ -22,11 +22,17 @@ public interface SpaceRepository extends JpaRepository<Space, UUID>, JpaSpecific
 
     Page<Space> findByCityAndActiveTrue(String city, Pageable pageable);
 
-    @Query("SELECT s FROM Space s WHERE s.active = true " +
+    @Query(value = "SELECT * FROM spaces s WHERE s.active = true " +
            "AND (:city IS NULL OR LOWER(s.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
-           "AND (:minPrice IS NULL OR s.pricePerHour >= :minPrice) " +
-           "AND (:maxPrice IS NULL OR s.pricePerHour <= :maxPrice) " +
-           "AND (:capacity IS NULL OR s.capacity >= :capacity)")
+           "AND (CAST(:minPrice AS numeric) IS NULL OR s.price_per_hour >= CAST(:minPrice AS numeric)) " +
+           "AND (CAST(:maxPrice AS numeric) IS NULL OR s.price_per_hour <= CAST(:maxPrice AS numeric)) " +
+           "AND (CAST(:capacity AS integer) IS NULL OR s.capacity >= CAST(:capacity AS integer))",
+           countQuery = "SELECT COUNT(*) FROM spaces s WHERE s.active = true " +
+           "AND (:city IS NULL OR LOWER(s.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
+           "AND (CAST(:minPrice AS numeric) IS NULL OR s.price_per_hour >= CAST(:minPrice AS numeric)) " +
+           "AND (CAST(:maxPrice AS numeric) IS NULL OR s.price_per_hour <= CAST(:maxPrice AS numeric)) " +
+           "AND (CAST(:capacity AS integer) IS NULL OR s.capacity >= CAST(:capacity AS integer))",
+           nativeQuery = true)
     Page<Space> findWithFilters(
             @Param("city") String city,
             @Param("minPrice") BigDecimal minPrice,

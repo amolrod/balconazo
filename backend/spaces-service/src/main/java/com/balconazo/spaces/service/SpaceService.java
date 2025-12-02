@@ -68,6 +68,8 @@ public class SpaceService {
                 .description(request.getDescription())
                 .city(request.getCity())
                 .address(request.getAddress())
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
                 .capacity(request.getCapacity())
                 .pricePerHour(request.getPricePerHour())
                 .active(true)
@@ -121,6 +123,8 @@ public class SpaceService {
         space.setDescription(request.getDescription());
         space.setCity(request.getCity());
         space.setAddress(request.getAddress());
+        space.setLatitude(request.getLatitude());
+        space.setLongitude(request.getLongitude());
         space.setCapacity(request.getCapacity());
         space.setPricePerHour(request.getPricePerHour());
 
@@ -201,6 +205,8 @@ public class SpaceService {
                 .description(space.getDescription())
                 .city(space.getCity())
                 .address(space.getAddress())
+                .latitude(space.getLatitude())
+                .longitude(space.getLongitude())
                 .capacity(space.getCapacity())
                 .pricePerHour(space.getPricePerHour())
                 .active(space.getActive())

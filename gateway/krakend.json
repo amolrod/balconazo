@@ -27,6 +27,20 @@
   },
   "endpoints": [
     {
+      "@comment": "=== AUTH - REGISTRO PÚBLICO ===",
+      "endpoint": "/api/auth/register",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": ["Content-Type"],
+      "backend": [
+        {
+          "url_pattern": "/auth/register",
+          "host": ["http://users-service:8080"],
+          "encoding": "json"
+        }
+      ]
+    },
+    {
       "@comment": "=== USERS SERVICE ===",
       "endpoint": "/api/users/me",
       "method": "GET",

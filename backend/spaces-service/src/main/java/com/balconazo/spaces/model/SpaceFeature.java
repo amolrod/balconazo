@@ -3,6 +3,7 @@ package com.balconazo.spaces.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -24,4 +25,17 @@ public class SpaceFeature {
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpaceFeature that = (SpaceFeature) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

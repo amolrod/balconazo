@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { User, LogIn, UserPlus, Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
+import { LogIn, Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useAuth } from "@/lib/auth";
 
 export default function Header() {
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -63,72 +65,108 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <ModeToggle />
 
-          {/* User Menu */}
-          <div className="user-menu-wrapper" ref={menuRef}>
-          <button 
-            className="user-menu-trigger"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-expanded={isMenuOpen}
-            aria-haspopup="true"
-          >
-            {/* Hamburger Icon */}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-            
-            {/* Avatar */}
-            <div className="user-avatar">
-              <User size={18} />
-            </div>
-          </button>
+          {/* Show login button when not authenticated */}
+          {!isLoading && !isAuthenticated && (
+            <Link href="/auth" className="login-button">
+              <LogIn size={18} />
+              <span>Iniciar sesión</span>
+            </Link>
+          )}
 
-          {/* Dropdown Menu */}
-          {isMenuOpen && (
-            <div className="user-dropdown">
-              {/* Guest Section */}
-              <div className="dropdown-section">
-                <Link href="/auth" className="dropdown-item dropdown-item-bold" onClick={() => setIsMenuOpen(false)}>
-                  <LogIn size={18} />
-                  Iniciar sesión
-                </Link>
-                <Link href="/auth?mode=register" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
-                  <UserPlus size={18} />
-                  Registrarse
-                </Link>
-              </div>
+          {/* User Menu - only show when authenticated */}
+          {!isLoading && isAuthenticated && (
+            <div className="user-menu-wrapper" ref={menuRef}>
+              <button 
+                className="user-menu-trigger"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-expanded={isMenuOpen}
+                aria-haspopup="true"
+              >
+                {/* Hamburger Icon */}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                
+                {/* Avatar */}
+                <div className="user-avatar user-avatar--authenticated">
+                  <span className="user-avatar-initial">
+                    {user?.firstName?.[0] || user?.name?.[0] || "U"}
+                  </span>
+                </div>
+              </button>
 
-              <div className="dropdown-divider"></div>
+              {/* Dropdown Menu for authenticated users */}
+              {isMenuOpen && (
+                <div className="user-dropdown">
+                  {/* User Info */}
+                  <div className="dropdown-user-info">
+                    <div className="dropdown-user-avatar">
+                      {user?.firstName?.[0] || user?.name?.[0] || "U"}
+                    </div>
+                    <div className="dropdown-user-details">
+                      <span className="dropdown-user-name">{user?.name}</span>
+                      <span className="dropdown-user-email">{user?.email}</span>
+                    </div>
+                  </div>
 
-              {/* Navigation Section */}
-              <div className="dropdown-section">
-                <Link href="/publicar" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
-                  <Home size={18} />
-                  Publica tu espacio
-                </Link>
-                <Link href="/favoritos" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
-                  <Heart size={18} />
-                  Favoritos
-                </Link>
-                <Link href="/reservas" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
-                  <Calendar size={18} />
-                  Mis reservas
-                </Link>
-              </div>
+                  <div className="dropdown-divider"></div>
 
-              <div className="dropdown-divider"></div>
+                  {/* Navigation Section */}
+                  <div className="dropdown-section">
+                    <Link href="/publicar" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      <Home size={18} />
+                      Publica tu espacio
+                    </Link>
+                    <Link href="/favoritos" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      <Heart size={18} />
+                      Favoritos
+                    </Link>
+                    <Link href="/reservas" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      <Calendar size={18} />
+                      Mis reservas
+                    </Link>
+                  </div>
 
-              {/* Help Section */}
-              <div className="dropdown-section">
-                <Link href="/ayuda" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
-                  <HelpCircle size={18} />
-                  Centro de ayuda
-                </Link>
-              </div>
+                  <div className="dropdown-divider"></div>
+
+                  {/* Settings Section */}
+                  <div className="dropdown-section">
+                    <Link href="/cuenta" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      <Settings size={18} />
+                      Configuración
+                    </Link>
+                    <Link href="/ayuda" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                      <HelpCircle size={18} />
+                      Centro de ayuda
+                    </Link>
+                  </div>
+
+                  <div className="dropdown-divider"></div>
+
+                  {/* Logout */}
+                  <div className="dropdown-section">
+                    <button 
+                      className="dropdown-item dropdown-item-danger" 
+                      onClick={() => {
+                        logout();
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      <LogOut size={18} />
+                      Cerrar sesión
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
+
+          {/* Loading state */}
+          {isLoading && (
+            <div className="user-avatar-skeleton" />
+          )}
         </div>
       </div>
     </nav>

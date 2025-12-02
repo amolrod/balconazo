@@ -1,0 +1,771 @@
+/* ============================================
+   SPACE DETAIL PAGE STYLES
+   Estilos específicos para la página de detalle
+   ============================================ */
+
+/* Container principal */
+.space-detail-page {
+  min-height: 100vh;
+  background: var(--background);
+  padding-bottom: 5rem;
+}
+
+/* Header con título */
+.space-detail-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+.space-detail-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.space-detail-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+  .space-detail-title {
+    font-size: 2rem;
+  }
+}
+
+.space-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.space-detail-location {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.space-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.space-detail-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--foreground);
+}
+
+.space-detail-action-btn:hover {
+  background: var(--accent);
+}
+
+.space-detail-action-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.space-detail-action-btn span {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .space-detail-action-btn span {
+    display: inline;
+  }
+}
+
+/* Container del contenido */
+.space-detail-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Galería de imágenes */
+.space-gallery-wrapper {
+  padding: 1.5rem 0;
+}
+
+.space-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5rem;
+  height: 480px;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .space-gallery-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    height: 300px;
+  }
+  
+  .space-gallery-secondary {
+    display: none;
+  }
+}
+
+.space-gallery-main {
+  grid-column: span 2;
+  grid-row: span 2;
+  position: relative;
+  background: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .space-gallery-main {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+.space-gallery-secondary {
+  position: relative;
+  background: var(--muted);
+}
+
+.space-gallery-img {
+  object-fit: cover;
+}
+
+.space-gallery-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-gallery-placeholder-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+  opacity: 0.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layout principal */
+.space-main-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .space-main-layout {
+    grid-template-columns: 1fr 380px;
+    gap: 3rem;
+  }
+}
+
+/* Contenido principal */
+.space-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Info rápida */
+.space-quick-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.space-quick-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.space-quick-info-item svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #e11d48;
+}
+
+.space-quick-info-item strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.space-quick-info-item span {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-left: 0.25rem;
+}
+
+/* Secciones de contenido */
+.space-section {
+  padding-top: 1.5rem;
+}
+
+.space-section-bordered {
+  border-top: 1px solid var(--border);
+}
+
+.space-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.space-description {
+  color: var(--muted-foreground);
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+/* Amenities grid */
+.space-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .space-amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem 2rem;
+  }
+}
+
+.space-amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.space-amenity-item svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+.space-amenity-item span {
+  color: var(--foreground);
+}
+
+/* Trust badges */
+.space-trust-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .space-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.space-trust-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.space-trust-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.space-trust-icon--rose {
+  background: rgba(225, 29, 72, 0.1);
+}
+
+.space-trust-icon--rose svg {
+  color: #e11d48;
+}
+
+.space-trust-icon--green {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.space-trust-icon--green svg {
+  color: #16a34a;
+}
+
+.space-trust-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.space-trust-content h3 {
+  font-weight: 600;
+  color: var(--foreground);
+  font-size: 0.9375rem;
+}
+
+.space-trust-content p {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin-top: 0.125rem;
+}
+
+/* Sidebar de reserva */
+.space-sidebar {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .space-sidebar {
+    position: sticky;
+    top: 1.5rem;
+    height: fit-content;
+  }
+}
+
+.space-booking-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: var(--card);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Precio */
+.space-price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.space-price-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.space-price-unit {
+  color: var(--muted-foreground);
+}
+
+/* Formulario de reserva */
+.space-booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Date picker dropdown */
+.space-date-picker {
+  position: relative;
+}
+
+.space-date-picker-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  text-align: left;
+}
+
+.space-date-picker-trigger:hover {
+  border-color: var(--ring);
+}
+
+.space-date-picker-trigger svg {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.space-calendar-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.space-calendar-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.space-calendar-dropdown-header span {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--foreground);
+}
+
+.space-calendar-close {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.space-calendar-close:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+.space-form-field {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: transparent;
+}
+
+.space-form-field:focus-within {
+  border-color: var(--ring);
+}
+
+.space-form-label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.space-form-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--foreground);
+  font-size: 0.9375rem;
+}
+
+.space-form-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.space-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+/* Contador de invitados */
+.space-guests-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.space-guests-count {
+  color: var(--foreground);
+}
+
+.space-guests-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.space-guests-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--foreground);
+}
+
+.space-guests-btn:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.space-guests-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.space-guests-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.space-guests-number {
+  width: 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Botón de reservar */
+.space-book-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(to right, #e11d48, #f43f5e);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
+}
+
+.space-book-btn:hover {
+  background: linear-gradient(to right, #be123c, #e11d48);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.35);
+  transform: translateY(-1px);
+}
+
+.space-book-btn:active {
+  transform: translateY(0);
+}
+
+/* Desglose de precio */
+.space-price-breakdown {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.space-price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.space-price-row span:first-child {
+  color: var(--muted-foreground);
+}
+
+.space-price-row span:last-child {
+  color: var(--foreground);
+}
+
+.space-price-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Loading skeleton */
+.space-skeleton {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Error state */
+.space-error-container {
+  min-height: 100vh;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.space-error-content {
+  text-align: center;
+  max-width: 28rem;
+}
+
+.space-error-icon {
+  width: 5rem;
+  height: 5rem;
+  background: var(--muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.space-error-icon svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--muted-foreground);
+}
+
+.space-error-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+}
+
+.space-error-message {
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+}
+
+.space-error-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.space-error-link:hover {
+  opacity: 0.9;
+}
+
+.space-error-link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ============================================
+   MAP SECTION
+   ============================================ */
+
+.space-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.space-location-address {
+  color: var(--muted-foreground);
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.space-map-container {
+  width: 100%;
+  height: 350px;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--muted);
+}
+
+.space-map-skeleton {
+  width: 100%;
+  height: 350px;
+  border-radius: 1rem;
+  background: var(--muted);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Leaflet overrides for dark mode support */
+.space-map-container .leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.space-map-container .leaflet-control-attribution {
+  font-size: 0.625rem;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.space-map-container .leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.space-map-container .leaflet-popup-content {
+  margin: 0.75rem 1rem;
+}

@@ -7,9 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "spaces")
@@ -39,6 +37,12 @@ public class Space {
     @Column(length = 255)
     private String address;
 
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
     @Column(nullable = false)
     private Integer capacity;
 
@@ -60,11 +64,11 @@ public class Space {
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     @OrderBy("sortOrder ASC")
-    private List<SpacePhoto> photos = new ArrayList<>();
+    private Set<SpacePhoto> photos = new TreeSet<>();
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<SpaceFeature> features = new ArrayList<>();
+    private Set<SpaceFeature> features = new HashSet<>();
 
     public void addPhoto(SpacePhoto photo) {
         photos.add(photo);
@@ -87,6 +91,6 @@ public class Space {
     }
 
     public String getThumbnailUrl() {
-        return photos.isEmpty() ? null : photos.get(0).getUrl();
+        return photos.isEmpty() ? null : photos.iterator().next().getUrl();
     }
 }

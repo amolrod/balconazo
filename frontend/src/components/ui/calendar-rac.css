@@ -1,0 +1,142 @@
+/* ============================================
+   CALENDAR COMPONENT STYLES
+   ============================================ */
+
+.calendar-root {
+  width: 100%;
+  background: var(--background);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.calendar-heading {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.calendar-nav-btn {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.calendar-nav-btn:hover {
+  background: var(--accent);
+}
+
+.calendar-nav-btn[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Grid layout */
+.calendar-grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.calendar-grid thead,
+.calendar-grid tbody {
+  display: block;
+}
+
+.calendar-grid tr {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.125rem;
+}
+
+/* Weekday headers */
+.calendar-weekday {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* Calendar cells */
+.calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  padding: 0;
+  min-height: 2.25rem;
+}
+
+.calendar-cell:hover:not([data-disabled]):not([data-unavailable]):not([data-outside-month]) {
+  background: var(--accent);
+}
+
+/* Selected states */
+.calendar-cell[data-selected] {
+  background: var(--accent);
+}
+
+.calendar-cell[data-selection-start],
+.calendar-cell[data-selection-end] {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.calendar-cell[data-selection-start] {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.calendar-cell[data-selection-end] {
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.calendar-cell[data-selection-start][data-selection-end] {
+  border-radius: 0.375rem;
+}
+
+/* Outside visible month */
+.calendar-cell[data-outside-month] {
+  color: var(--muted-foreground);
+  opacity: 0.3;
+}
+
+/* Disabled (before today) */
+.calendar-cell[data-disabled] {
+  color: var(--muted-foreground);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Unavailable (booked) - with strikethrough */
+.calendar-cell[data-unavailable] {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* Today indicator */
+.calendar-cell[data-focused] {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

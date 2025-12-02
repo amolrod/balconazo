@@ -761,63 +761,6 @@ body {
 }
 
 /* ============================================
-   CTA Section
-   ============================================ */
-
-.cta-section {
-  padding: 80px 24px;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  text-align: center;
-}
-
-.cta-section h2 { 
-  font-size: 2rem; 
-  color: var(--primary-foreground); 
-  margin-bottom: 16px; 
-  font-weight: 800; 
-}
-
-.cta-section p { 
-  font-size: 1.125rem; 
-  color: var(--primary-foreground); 
-  opacity: 0.9;
-  margin-bottom: 32px; 
-  max-width: 600px; 
-  margin-left: auto;
-  margin-right: auto;
-}
-@media (min-width: 768px) {
-  .cta-section p {
-    font-size: 1.25rem;
-  }
-}
-
-.btn-cta {
-  padding: 16px 32px;
-  background: white;
-  color: #e11d48;
-  font-weight: 700;
-  font-size: 1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s;
-}
-@media (min-width: 768px) {
-  .btn-cta {
-    font-size: 1.125rem;
-  }
-}
-.btn-cta:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
-}
-
-/* ============================================
    Navbar
    ============================================ */
 
@@ -978,10 +921,117 @@ body {
   color: var(--foreground);
 }
 
+.dropdown-item-danger {
+  color: #ef4444;
+}
+
+.dropdown-item-danger:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.dropdown-item-danger svg {
+  color: #ef4444;
+}
+
 .dropdown-divider {
   height: 1px;
   background: var(--border);
   margin: 4px 0;
+}
+
+/* Login Button */
+.login-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.login-button:hover {
+  background: var(--primary-hover, hsl(346.8 77.2% 45%));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+/* Authenticated User Avatar */
+.user-avatar--authenticated {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-avatar-initial {
+  text-transform: uppercase;
+}
+
+.user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Dropdown User Info */
+.dropdown-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.dropdown-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.dropdown-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dropdown-user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-user-email {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* User Avatar Skeleton (loading state) */
+.user-avatar-skeleton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ============================================
@@ -1999,7 +2049,7 @@ body {
   left: 0;
   right: 0;
   opacity: 0;
-  transform: translateX(30px) scale(0.98);
+  transform: translateX(20px);
   pointer-events: none;
   visibility: hidden;
 }
@@ -2009,7 +2059,7 @@ body {
 /* Login se oculta hacia la izquierda */
 .auth-forms-wrapper.show-register .auth-form-panel:nth-child(1) {
   opacity: 0;
-  transform: translateX(-30px) scale(0.98);
+  transform: translateX(-20px);
   pointer-events: none;
   position: absolute;
   visibility: hidden;
@@ -2019,7 +2069,7 @@ body {
 .auth-forms-wrapper.show-register .auth-form-panel:nth-child(2) {
   position: relative;
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: translateX(0);
   pointer-events: auto;
   visibility: visible;
 }
@@ -2071,6 +2121,29 @@ body {
   .auth-container.register-mode .auth-content {
     transform: translateX(-100%);
   }
+}
+
+/* ====== AUTH LOADING STATE ====== */
+.auth-loading {
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+}
+
+.auth-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: authSpin 0.8s linear infinite;
+}
+
+@keyframes authSpin {
+  to { transform: rotate(360deg); }
 }
 
 /* ============================================
@@ -2147,6 +2220,58 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ============================================
+   Auth Redirect Page (Keycloak)
+   ============================================ */
+
+.auth-redirect-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.auth-redirect-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.auth-redirect-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  z-index: 20;
+  text-align: center;
+}
+
+.auth-redirect-logo {
+  filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.5));
+}
+
+.auth-redirect-spinner {
+  color: #f43f5e;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.auth-redirect-text {
+  color: #94a3b8;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -2155,3 +2280,4 @@ body {
     @apply bg-background text-foreground;
   }
 }
+

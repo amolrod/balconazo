@@ -17,7 +17,6 @@ import {
   Lock, 
   CheckCircle, 
   Headphones, 
-  ArrowRight, 
   AlertCircle, 
   Building 
 } from "lucide-react";
@@ -60,45 +59,47 @@ export default function HomePage() {
   const [searchGuests, setSearchGuests] = useState("");
 
   // Handle scroll - fijar barra al navbar y deslizar progresivamente cuando llega a Why Balconazo
-  const handleScroll = useCallback(() => {
-    const whySection = whyBalconazoRef.current;
-    const placeholder = categoryBarPlaceholderRef.current;
-    
-    if (!placeholder) return;
-
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-    const placeholderTop = placeholder.getBoundingClientRect().top + currentScroll;
-    
-    // Fijar la barra cuando el placeholder llega al navbar (80px)
-    const shouldBeFixed = currentScroll > placeholderTop - 80;
-    setIsCategoryBarFixed(shouldBeFixed);
-    
-    // Calcular offset progresivo basado en la posición de Why Balconazo
-    if (whySection) {
-      const whyRect = whySection.getBoundingClientRect();
-      const categoryBarHeight = 73;
-      const navbarHeight = 80;
-      
-      // Distancia desde el top de Why Balconazo hasta donde está la barra fija
-      const barBottomPosition = navbarHeight + categoryBarHeight;
-      const distanceToBar = whyRect.top - barBottomPosition;
-      
-      // Empezar a deslizar cuando Why Balconazo está a 150px de la barra
-      const slideStartDistance = 150;
-      
-      if (distanceToBar < slideStartDistance && distanceToBar > -categoryBarHeight) {
-        // Progreso de 0 (visible) a 100 (oculto)
-        const progress = ((slideStartDistance - distanceToBar) / slideStartDistance) * 100;
-        setCategoryBarOffset(Math.min(Math.max(0, progress), 100));
-      } else if (distanceToBar <= -categoryBarHeight) {
-        setCategoryBarOffset(100);
-      } else {
-        setCategoryBarOffset(0);
-      }
-    } else {
-      setCategoryBarOffset(0);
-    }
-  }, []);
+  // COMENTADO TEMPORALMENTE - Barra fija en su lugar, no se pega al navbar
+  // const handleScroll = useCallback(() => {
+  //   // const whySection = whyBalconazoRef.current;
+  //   const placeholder = categoryBarPlaceholderRef.current;
+  //   
+  //   if (!placeholder) return;
+  //
+  //   const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  //   const placeholderTop = placeholder.getBoundingClientRect().top + currentScroll;
+  //   
+  //   // Fijar la barra cuando el placeholder llega al navbar (80px)
+  //   const shouldBeFixed = currentScroll > placeholderTop - 80;
+  //   setIsCategoryBarFixed(shouldBeFixed);
+  //   
+  //   // COMENTADO: Calcular offset progresivo basado en la posición de Why Balconazo
+  //   // if (whySection) {
+  //   //   const whyRect = whySection.getBoundingClientRect();
+  //   //   const categoryBarHeight = 73;
+  //   //   const navbarHeight = 80;
+  //   //   
+  //   //   // Distancia desde el top de Why Balconazo hasta donde está la barra fija
+  //   //   const barBottomPosition = navbarHeight + categoryBarHeight;
+  //   //   const distanceToBar = whyRect.top - barBottomPosition;
+  //   //   
+  //   //   // Empezar a deslizar cuando Why Balconazo está a 150px de la barra
+  //   //   const slideStartDistance = 150;
+  //   //   
+  //   //   if (distanceToBar < slideStartDistance && distanceToBar > -categoryBarHeight) {
+  //   //     // Progreso de 0 (visible) a 100 (oculto)
+  //   //     const progress = ((slideStartDistance - distanceToBar) / slideStartDistance) * 100;
+  //   //     setCategoryBarOffset(Math.min(Math.max(0, progress), 100));
+  //   //   } else if (distanceToBar <= -categoryBarHeight) {
+  //   //     setCategoryBarOffset(100);
+  //   //   } else {
+  //   //     setCategoryBarOffset(0);
+  //   //   }
+  //   // } else {
+  //   //   setCategoryBarOffset(0);
+  //   // }
+  // }, []);
+  const handleScroll = useCallback(() => {}, []);
 
   // Set up scroll listener
   useEffect(() => {
@@ -260,8 +261,9 @@ export default function HomePage() {
           ============================================ */}
       <div ref={categoryBarPlaceholderRef} className="category-bar-wrapper">
         <div 
-          className={`category-bar ${isCategoryBarFixed ? 'fixed' : ''}`}
-          style={{ transform: `translateY(-${categoryBarOffset}%)` }}
+          className="category-bar"
+          // className={`category-bar ${isCategoryBarFixed ? 'fixed' : ''}`} // COMENTADO: sticky al navbar
+          // style={{ transform: `translateY(-${categoryBarOffset}%)` }} // COMENTADO: deslizamiento
         >
           <div className="category-bar-container">
             <div className="category-list hide-scrollbar">
@@ -348,14 +350,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* More Button */}
-          {!isLoading && !error && spaces.length > 0 && totalSpaces > spaces.length && (
-            <div className="spaces-more">
-              <button className="btn-more">
-                Mostrar más espacios
-              </button>
-            </div>
-          )}
         </div>
       </section>
 
@@ -397,20 +391,6 @@ export default function HomePage() {
               <p>Nuestro equipo está disponible las 24 horas para ayudarte con cualquier consulta o problema.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ============================================
-          CTA SECTION
-          ============================================ */}
-      <section className="cta-section">
-        <div className="container-full" style={{ maxWidth: '800px' }}>
-          <h2>¿Tienes un espacio que alquilar?</h2>
-          <p>Únete a miles de anfitriones que ya están ganando dinero extra con sus terrazas, jardines y salones.</p>
-          <button className="btn-cta">
-            Convertirme en Anfitrión
-            <ArrowRight size={20} />
-          </button>
         </div>
       </section>
     </>

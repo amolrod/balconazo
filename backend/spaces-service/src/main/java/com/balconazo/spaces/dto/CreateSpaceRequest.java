@@ -30,6 +30,14 @@ public class CreateSpaceRequest {
     @Size(max = 255, message = "La dirección no puede superar los 255 caracteres")
     private String address;
 
+    @DecimalMin(value = "-90.0", message = "Latitud inválida")
+    @DecimalMax(value = "90.0", message = "Latitud inválida")
+    private Double latitude;
+
+    @DecimalMin(value = "-180.0", message = "Longitud inválida")
+    @DecimalMax(value = "180.0", message = "Longitud inválida")
+    private Double longitude;
+
     @NotNull(message = "La capacidad es obligatoria")
     @Min(value = 1, message = "La capacidad mínima es 1 persona")
     @Max(value = 500, message = "La capacidad máxima es 500 personas")
