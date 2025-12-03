@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { 
   Search, 
   MapPin, 
@@ -36,6 +37,7 @@ const categories = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("todos");
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -165,8 +167,15 @@ export default function HomePage() {
   };
 
   const handleSearch = () => {
-    // TODO: Implement search functionality
-    console.log("Searching:", { searchLocation, searchDate, searchGuests });
+    // Construir los parámetros de búsqueda
+    const params = new URLSearchParams();
+    if (searchLocation) params.set("location", searchLocation);
+    if (searchDate) params.set("date", searchDate);
+    if (searchGuests) params.set("guests", searchGuests);
+    
+    // Navegar a la página de búsqueda
+    const queryString = params.toString();
+    router.push(`/search${queryString ? `?${queryString}` : ""}`);
   };
 
   return (

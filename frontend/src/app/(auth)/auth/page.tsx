@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,7 +10,7 @@ import { Particles } from "@/components/ui/particles";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 
-export default function AuthPage() {
+function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { loginWithCredentials, registerWithCredentials, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -574,5 +574,18 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="auth-loading">
+        <div className="auth-loading-spinner"></div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }
