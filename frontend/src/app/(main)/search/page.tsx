@@ -10,6 +10,14 @@ import SpaceCard from "@/components/SpaceCard";
 import { spacesApi, type Space } from "@/lib/api";
 import "./search.css";
 
+// Función para normalizar texto (quitar tildes y diacríticos)
+const normalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+};
+
 // Componente interno que usa useSearchParams
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -115,14 +123,14 @@ function SearchContent() {
         
         let filteredSpaces = response.content || [];
         
-        // Filtro de búsqueda por texto (frontend)
+        // Filtro de búsqueda por texto (frontend) - normalizado sin tildes
         if (searchQuery) {
-          const query = searchQuery.toLowerCase();
+          const query = normalizeText(searchQuery);
           filteredSpaces = filteredSpaces.filter((space: Space) =>
-            space.title?.toLowerCase().includes(query) ||
-            space.description?.toLowerCase().includes(query) ||
-            space.city?.toLowerCase().includes(query) ||
-            space.address?.toLowerCase().includes(query)
+            normalizeText(space.title || "").includes(query) ||
+            normalizeText(space.description || "").includes(query) ||
+            normalizeText(space.city || "").includes(query) ||
+            normalizeText(space.address || "").includes(query)
           );
         }
 
@@ -308,24 +316,27 @@ function SearchContent() {
                   />
                 </div>
 
-                <div className="filter-group filter-group-with-clear">
+                <div className="filter-group">
                   <label>Ordenar por</label>
-                  <div className="filter-row-actions">
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                      <option value="relevance">Relevancia</option>
-                      <option value="price,asc">Precio: menor a mayor</option>
-                      <option value="price,desc">Precio: mayor a menor</option>
-                      <option value="capacity,desc">Mayor capacidad</option>
-                      <option value="name,asc">Nombre A-Z</option>
-                    </select>
-                    {hasActiveFilters && (
-                      <button type="button" className="clear-inline-btn" onClick={clearFilters} title="Limpiar todos los filtros">
-                        <X size={16} />
-                        Limpiar
-                      </button>
-                    )}
-                  </div>
+                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                    <option value="relevance">Relevancia</option>
+                    <option value="price,asc">Precio: menor a mayor</option>
+                    <option value="price,desc">Precio: mayor a menor</option>
+                    <option value="capacity,desc">Mayor capacidad</option>
+                    <option value="name,asc">Nombre A-Z</option>
+                  </select>
                 </div>
+
+                {/* Botón limpiar filtros */}
+                {hasActiveFilters && (
+                  <div className="filter-group filter-group-clear">
+                    <label>&nbsp;</label>
+                    <button type="button" className="clear-inline-btn" onClick={clearFilters} title="Limpiar todos los filtros">
+                      <X size={16} />
+                      Limpiar filtros
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

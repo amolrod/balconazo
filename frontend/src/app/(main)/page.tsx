@@ -275,27 +275,28 @@ export default function HomePage() {
                 <div className="search-date-display">
                   {formatDateRange()}
                 </div>
-                
-                {isCalendarOpen && (
-                  <div 
-                    ref={calendarRef} 
-                    className="home-calendar-popup"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <RangeCalendar
-                      aria-label="Seleccionar rango de fechas"
-                      value={dateRange}
-                      onChange={(range) => {
-                        setDateRange(range);
-                        if (range?.start && range?.end) {
-                          setIsCalendarOpen(false);
-                        }
-                      }}
-                      minValue={today(getLocalTimeZone())}
-                    />
-                  </div>
-                )}
               </div>
+
+              {/* Calendar Popup - fuera del contenedor para evitar distorsión */}
+              {isCalendarOpen && (
+                <div 
+                  ref={calendarRef} 
+                  className="home-calendar-popup"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <RangeCalendar
+                    aria-label="Seleccionar rango de fechas"
+                    value={dateRange}
+                    onChange={(range) => {
+                      setDateRange(range);
+                      if (range?.start && range?.end) {
+                        setIsCalendarOpen(false);
+                      }
+                    }}
+                    minValue={today(getLocalTimeZone())}
+                  />
+                </div>
+              )}
 
               <div className="search-divider"></div>
 

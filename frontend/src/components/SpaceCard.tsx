@@ -25,23 +25,15 @@ export default function SpaceCard({ space, index = 0 }: SpaceCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Get all images: use images array if available, or create array with thumbnailUrl + placeholders for demo
+  // Get all images: use the full images array if available
   const getImages = () => {
-    if (space.images && space.images.length > 1) {
+    // If space has images array with content, use all of them
+    if (space.images && space.images.length > 0) {
       return space.images;
     }
-    // If only thumbnailUrl or single image, add some placeholders for demo
-    const primaryImage = space.thumbnailUrl 
-      || (space.images && space.images[0]) 
-      || placeholderImages[index % placeholderImages.length];
-    
-    // Add 2-3 more placeholder images for navigation demo
-    const additionalImages = [
-      placeholderImages[(index + 1) % placeholderImages.length],
-      placeholderImages[(index + 2) % placeholderImages.length],
-    ];
-    
-    return [primaryImage, ...additionalImages];
+    // Fallback to thumbnailUrl or placeholder
+    const primaryImage = space.thumbnailUrl || placeholderImages[index % placeholderImages.length];
+    return [primaryImage];
   };
 
   const allImages = getImages();
@@ -121,8 +113,8 @@ export default function SpaceCard({ space, index = 0 }: SpaceCardProps) {
           </>
         )}
 
-        {/* Image Dots Indicator */}
-        {hasMultipleImages && (
+        {/* Image Dots Indicator - solo visible en hover */}
+        {hasMultipleImages && isHovered && (
           <div className="image-dots">
             {allImages.map((_, idx) => (
               <span 

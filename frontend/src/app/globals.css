@@ -387,26 +387,30 @@ body {
   }
 }
 
-/* Home Search Button - Circular */
+/* Home Search Button - Circular y colorido */
 .home-search-btn {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  min-height: 48px;
-  background: linear-gradient(to bottom right, #e11d48, #f43f5e);
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-  flex-shrink: 0;
-  border: none;
-  cursor: pointer;
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
+  background: linear-gradient(to bottom right, #e11d48, #f43f5e) !important;
+  border-radius: 50% !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.3) !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  flex-shrink: 0 !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0 !important;
 }
 .home-search-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 15px 25px -5px rgba(244, 63, 94, 0.4) !important;
 }
 
 /* Guests input wrapper - evita que el input invada el botón */
@@ -423,30 +427,33 @@ body {
   color: var(--muted-foreground);
 }
 
-/* Home Calendar Popup */
+/* Home Calendar Popup - Posicionado fuera del buscador */
 .home-calendar-popup {
-  position: absolute;
-  top: calc(100% + 12px);
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 1rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  padding: 1.5rem;
 }
 
 .dark .home-calendar-popup {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Overlay para cerrar el calendario */
+.search-bar-wrapper {
+  position: relative;
 }
 
 @media (max-width: 768px) {
   .home-calendar-popup {
-    left: 0;
-    right: 0;
-    transform: none;
-    border-radius: 0.75rem;
+    width: calc(100% - 2rem);
+    max-width: 350px;
   }
 }
 
