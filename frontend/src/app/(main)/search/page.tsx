@@ -259,7 +259,7 @@ function SearchContent() {
             )}
 
             <button type="submit" className="search-submit-btn">
-              Buscar
+              <Search size={18} />
             </button>
           </form>
 
