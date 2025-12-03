@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
@@ -8,9 +9,16 @@ import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button
 import { useAuth } from "@/lib/auth";
 
 export default function Header() {
+  const pathname = usePathname();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Determine active link
+  const isActive = (path: string) => {
+    if (path === "/") return pathname === "/";
+    return pathname.startsWith(path);
+  };
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -47,22 +55,22 @@ export default function Header() {
         {/* Navigation Menu */}
         <ul className="navbar-menu">
           <li>
-            <Link href="/" className="navbar-link navbar-link-active">
+            <Link href="/" className={`navbar-link ${isActive("/") ? "navbar-link-active" : ""}`}>
               Explorar
             </Link>
           </li>
           <li>
-            <Link href="/search" className="navbar-link">
+            <Link href="/search" className={`navbar-link ${isActive("/search") || isActive("/spaces") ? "navbar-link-active" : ""}`}>
               Espacios
             </Link>
           </li>
           <li>
-            <Link href="/reservas" className="navbar-link">
+            <Link href="/reservas" className={`navbar-link ${isActive("/reservas") ? "navbar-link-active" : ""}`}>
               Mis Reservas
             </Link>
           </li>
           <li>
-            <Link href="/favoritos" className="navbar-link">
+            <Link href="/favoritos" className={`navbar-link ${isActive("/favoritos") ? "navbar-link-active" : ""}`}>
               Favoritos
             </Link>
           </li>

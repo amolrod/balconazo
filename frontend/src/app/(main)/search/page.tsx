@@ -337,11 +337,9 @@ function SearchContent() {
               </div>
 
               <div className="filters-actions">
-                <button type="button" className="apply-filters-btn" onClick={handleSearch}>
-                  Aplicar filtros
-                </button>
                 <button type="button" className="clear-all-btn" onClick={clearFilters}>
-                  Limpiar todo
+                  <X size={16} />
+                  Limpiar filtros
                 </button>
               </div>
             </div>

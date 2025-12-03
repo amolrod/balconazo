@@ -25,13 +25,26 @@ export default function SpaceCard({ space, index = 0 }: SpaceCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Get all images: prefer images array, fallback to thumbnailUrl, then placeholder
-  const allImages = space.images && space.images.length > 0 
-    ? space.images 
-    : space.thumbnailUrl 
-      ? [space.thumbnailUrl]
-      : [placeholderImages[index % placeholderImages.length]];
-  
+  // Get all images: use images array if available, or create array with thumbnailUrl + placeholders for demo
+  const getImages = () => {
+    if (space.images && space.images.length > 1) {
+      return space.images;
+    }
+    // If only thumbnailUrl or single image, add some placeholders for demo
+    const primaryImage = space.thumbnailUrl 
+      || (space.images && space.images[0]) 
+      || placeholderImages[index % placeholderImages.length];
+    
+    // Add 2-3 more placeholder images for navigation demo
+    const additionalImages = [
+      placeholderImages[(index + 1) % placeholderImages.length],
+      placeholderImages[(index + 2) % placeholderImages.length],
+    ];
+    
+    return [primaryImage, ...additionalImages];
+  };
+
+  const allImages = getImages();
   const imageUrl = allImages[currentImageIndex];
   const hasMultipleImages = allImages.length > 1;
 

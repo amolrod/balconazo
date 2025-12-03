@@ -455,27 +455,6 @@
   color: var(--muted-foreground);
 }
 
-.apply-filters-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 0.875rem;
-  background: linear-gradient(135deg, #f43f5e, #e11d48);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.apply-filters-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
-}
-
 /* ============================================
    RESULTS GRID
    ============================================ */
@@ -951,27 +930,31 @@
 /* Filters Panel Actions */
 .filters-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
 
 .clear-all-btn {
-  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
   background: transparent;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--muted-foreground);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .clear-all-btn:hover {
-  background: var(--muted);
-  border-color: var(--foreground);
+  background: rgba(244, 63, 94, 0.1);
+  border-color: #f43f5e;
+  color: #f43f5e;
 }
 
 /* Results Bar */
