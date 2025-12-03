@@ -52,6 +52,11 @@ export default function Header() {
             </Link>
           </li>
           <li>
+            <Link href="/search" className="navbar-link">
+              Espacios
+            </Link>
+          </li>
+          <li>
             <Link href="/reservas" className="navbar-link">
               Mis Reservas
             </Link>
