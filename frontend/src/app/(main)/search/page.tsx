@@ -245,22 +245,6 @@ function SearchContent() {
               <Filter size={18} />
               <span>Filtros</span>
             </button>
-
-            {hasActiveFilters && (
-              <button
-                type="button"
-                className="clear-filters-btn"
-                onClick={clearFilters}
-                title="Limpiar todos los filtros"
-              >
-                <X size={18} />
-                <span>Limpiar</span>
-              </button>
-            )}
-
-            <button type="submit" className="search-submit-btn">
-              <Search size={18} />
-            </button>
           </form>
 
           {/* Panel de filtros expandible */}
@@ -324,23 +308,24 @@ function SearchContent() {
                   />
                 </div>
 
-                <div className="filter-group">
+                <div className="filter-group filter-group-with-clear">
                   <label>Ordenar por</label>
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                    <option value="relevance">Relevancia</option>
-                    <option value="price,asc">Precio: menor a mayor</option>
-                    <option value="price,desc">Precio: mayor a menor</option>
-                    <option value="capacity,desc">Mayor capacidad</option>
-                    <option value="name,asc">Nombre A-Z</option>
-                  </select>
+                  <div className="filter-row-actions">
+                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                      <option value="relevance">Relevancia</option>
+                      <option value="price,asc">Precio: menor a mayor</option>
+                      <option value="price,desc">Precio: mayor a menor</option>
+                      <option value="capacity,desc">Mayor capacidad</option>
+                      <option value="name,asc">Nombre A-Z</option>
+                    </select>
+                    {hasActiveFilters && (
+                      <button type="button" className="clear-inline-btn" onClick={clearFilters} title="Limpiar todos los filtros">
+                        <X size={16} />
+                        Limpiar
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-
-              <div className="filters-actions">
-                <button type="button" className="clear-all-btn" onClick={clearFilters}>
-                  <X size={16} />
-                  Limpiar filtros
-                </button>
               </div>
             </div>
           )}

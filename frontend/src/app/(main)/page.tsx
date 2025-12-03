@@ -21,6 +21,9 @@ import {
   AlertCircle, 
   Building 
 } from "lucide-react";
+import { RangeCalendar } from "@/components/ui/calendar-rac";
+import { getLocalTimeZone, today, parseDate } from "@internationalized/date";
+import type { DateValue } from "react-aria-components";
 import { spacesApi, Space } from "@/lib/api";
 import Carousel from "@/components/ui/carousel";
 
@@ -57,8 +60,38 @@ export default function HomePage() {
 
   // Search state
   const [searchLocation, setSearchLocation] = useState("");
-  const [searchDate, setSearchDate] = useState("");
   const [searchGuests, setSearchGuests] = useState("");
+  
+  // Estado del calendario con DateValue
+  const [dateRange, setDateRange] = useState<{ start: DateValue; end: DateValue } | null>(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const calendarButtonRef = useRef<HTMLDivElement>(null);
+
+  // Cerrar calendario al hacer clic fuera
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node) &&
+        calendarButtonRef.current &&
+        !calendarButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsCalendarOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Formatear fechas para mostrar
+  const formatDateRange = () => {
+    if (!dateRange) return "¿Cuándo?";
+    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+    const startStr = new Date(dateRange.start.toString()).toLocaleDateString("es-ES", options);
+    const endStr = new Date(dateRange.end.toString()).toLocaleDateString("es-ES", options);
+    return `${startStr} - ${endStr}`;
+  };
 
   // Handle scroll - fijar barra al navbar y deslizar progresivamente cuando llega a Why Balconazo
   // COMENTADO TEMPORALMENTE - Barra fija en su lugar, no se pega al navbar
@@ -167,11 +200,14 @@ export default function HomePage() {
   };
 
   const handleSearch = () => {
-    // Construir los parámetros de búsqueda
+    // Construir los parámetros de búsqueda con los nombres correctos
     const params = new URLSearchParams();
-    if (searchLocation) params.set("location", searchLocation);
-    if (searchDate) params.set("date", searchDate);
-    if (searchGuests) params.set("guests", searchGuests);
+    if (searchLocation) params.set("city", searchLocation);
+    if (dateRange) {
+      params.set("startDate", dateRange.start.toString());
+      params.set("endDate", dateRange.end.toString());
+    }
+    if (searchGuests) params.set("minCapacity", searchGuests);
     
     // Navegar a la página de búsqueda
     const queryString = params.toString();
@@ -225,38 +261,61 @@ export default function HomePage() {
 
               <div className="search-divider"></div>
 
-              {/* Date */}
-              <div className="search-input-group search-input-date">
+              {/* Date - Ahora con RangeCalendar */}
+              <div 
+                ref={calendarButtonRef}
+                className="search-input-group search-input-date"
+                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                style={{ cursor: 'pointer' }}
+              >
                 <label>
                   <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
                   Fecha
                 </label>
-                <input 
-                  type="text" 
-                  placeholder="¿Cuándo?"
-                  value={searchDate}
-                  onChange={(e) => setSearchDate(e.target.value)}
-                />
+                <div className="search-date-display">
+                  {formatDateRange()}
+                </div>
+                
+                {isCalendarOpen && (
+                  <div 
+                    ref={calendarRef} 
+                    className="home-calendar-popup"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <RangeCalendar
+                      aria-label="Seleccionar rango de fechas"
+                      value={dateRange}
+                      onChange={(range) => {
+                        setDateRange(range);
+                        if (range?.start && range?.end) {
+                          setIsCalendarOpen(false);
+                        }
+                      }}
+                      minValue={today(getLocalTimeZone())}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="search-divider"></div>
 
               {/* Guests + Button */}
               <div className="search-input-group search-input-guests">
-                <div style={{ flex: 1 }}>
+                <div className="search-guests-input-wrapper">
                   <label>
                     <Users size={12} style={{ display: 'inline', marginRight: '4px' }} />
                     Invitados
                   </label>
                   <input 
-                    type="text" 
+                    type="number" 
                     placeholder="¿Cuántos?"
                     value={searchGuests}
                     onChange={(e) => setSearchGuests(e.target.value)}
+                    min="1"
                   />
                 </div>
                 
-                <button className="search-submit-btn" onClick={handleSearch}>
+                <button className="home-search-btn" onClick={handleSearch}>
                   <Search size={20} strokeWidth={2.5} />
                 </button>
               </div>

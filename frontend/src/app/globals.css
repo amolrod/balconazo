@@ -387,9 +387,12 @@ body {
   }
 }
 
-.search-submit-btn {
+/* Home Search Button - Circular */
+.home-search-btn {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   background: linear-gradient(to bottom right, #e11d48, #f43f5e);
   border-radius: 50%;
   color: white;
@@ -402,8 +405,49 @@ body {
   border: none;
   cursor: pointer;
 }
-.search-submit-btn:hover {
+.home-search-btn:hover {
   transform: scale(1.05);
+}
+
+/* Guests input wrapper - evita que el input invada el botón */
+.search-guests-input-wrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Search Date Display */
+.search-date-display {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* Home Calendar Popup */
+.home-calendar-popup {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  padding: 1rem;
+}
+
+.dark .home-calendar-popup {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .home-calendar-popup {
+    left: 0;
+    right: 0;
+    transform: none;
+    border-radius: 0.75rem;
+  }
 }
 
 /* ============================================

@@ -108,7 +108,7 @@ function AuthPageContent() {
     setLoginLoading(true);
     
     try {
-      const success = await loginWithCredentials(loginData.email, loginData.password);
+      const success = await loginWithCredentials(loginData.email, loginData.password, loginData.rememberMe);
       if (success) {
         router.push("/");
       } else {

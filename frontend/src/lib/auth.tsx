@@ -46,7 +46,7 @@ interface AuthContextType {
   logout: () => void;
   getToken: () => Promise<string | null>;
   // Direct login/register with credentials (custom UI)
-  loginWithCredentials: (email: string, password: string) => Promise<boolean>;
+  loginWithCredentials: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
   registerWithCredentials: (data: RegisterData) => Promise<RegisterResult>;
 }
 
@@ -117,9 +117,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initKeycloak = async () => {
       try {
-        // First, check if we have tokens in sessionStorage (Direct Access Grants flow)
+        // First, check if we have tokens stored (from "Remember Me" feature)
         if (typeof window !== "undefined") {
-          const storedToken = sessionStorage.getItem("kc_access_token");
+          // Check which storage was used (localStorage for rememberMe, sessionStorage otherwise)
+          const rememberMe = localStorage.getItem("kc_remember_me") === "true";
+          const storage = rememberMe ? localStorage : sessionStorage;
+          const storedToken = storage.getItem("kc_access_token");
+          
           if (storedToken) {
             try {
               const payload = JSON.parse(atob(storedToken.split(".")[1]));
@@ -143,8 +147,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             } catch {
               // Invalid token, continue with Keycloak init
-              sessionStorage.removeItem("kc_access_token");
-              sessionStorage.removeItem("kc_refresh_token");
+              storage.removeItem("kc_access_token");
+              storage.removeItem("kc_refresh_token");
             }
           }
         }
@@ -221,10 +225,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Logout
   const logout = useCallback(() => {
-    // Clear session storage
+    // Clear both session and local storage
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("kc_access_token");
       sessionStorage.removeItem("kc_refresh_token");
+      localStorage.removeItem("kc_access_token");
+      localStorage.removeItem("kc_refresh_token");
+      localStorage.removeItem("kc_remember_me");
     }
     
     setUser(null);
@@ -254,9 +261,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
     
-    // Fallback: Check sessionStorage (for Direct Access Grants flow)
+    // Fallback: Check storage (localStorage for rememberMe, sessionStorage otherwise)
     if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("kc_access_token");
+      const rememberMe = localStorage.getItem("kc_remember_me") === "true";
+      const storage = rememberMe ? localStorage : sessionStorage;
+      const storedToken = storage.getItem("kc_access_token");
+      
       if (storedToken) {
         // Check if token is still valid
         try {
@@ -266,9 +276,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return storedToken;
           }
           // Token expired, try to refresh
-          const refreshToken = sessionStorage.getItem("kc_refresh_token");
+          const refreshToken = storage.getItem("kc_refresh_token");
           if (refreshToken) {
-            const newToken = await refreshAccessToken(refreshToken);
+            const newToken = await refreshAccessToken(refreshToken, rememberMe);
             if (newToken) {
               return newToken;
             }
@@ -283,7 +293,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [keycloak, token]);
 
   // Refresh access token using refresh token
-  const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
+  const refreshAccessToken = async (refreshToken: string, rememberMe: boolean = false): Promise<string | null> => {
     try {
       const tokenUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`;
       
@@ -301,16 +311,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (!response.ok) {
         // Refresh token expired, clear storage
-        sessionStorage.removeItem("kc_access_token");
-        sessionStorage.removeItem("kc_refresh_token");
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.removeItem("kc_access_token");
+        storage.removeItem("kc_refresh_token");
+        if (rememberMe) localStorage.removeItem("kc_remember_me");
         setUser(null);
         setToken(null);
         return null;
       }
 
       const tokenData = await response.json();
-      sessionStorage.setItem("kc_access_token", tokenData.access_token);
-      sessionStorage.setItem("kc_refresh_token", tokenData.refresh_token);
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem("kc_access_token", tokenData.access_token);
+      storage.setItem("kc_refresh_token", tokenData.refresh_token);
       setToken(tokenData.access_token);
       
       return tokenData.access_token;
@@ -322,7 +335,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Login with credentials (Direct Access Grants / Resource Owner Password)
   const loginWithCredentials = useCallback(async (
     email: string, 
-    password: string
+    password: string,
+    rememberMe: boolean = false
   ): Promise<boolean> => {
     try {
       const tokenUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`;
@@ -366,10 +380,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       setUser(userData);
       
-      // Store refresh token for later use
+      // Store tokens - use localStorage if rememberMe is checked (persistent), otherwise sessionStorage (closes with browser)
       if (typeof window !== "undefined") {
-        sessionStorage.setItem("kc_refresh_token", tokenData.refresh_token);
-        sessionStorage.setItem("kc_access_token", tokenData.access_token);
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem("kc_refresh_token", tokenData.refresh_token);
+        storage.setItem("kc_access_token", tokenData.access_token);
+        // Store preference to know which storage to use on reload
+        if (rememberMe) {
+          localStorage.setItem("kc_remember_me", "true");
+        } else {
+          localStorage.removeItem("kc_remember_me");
+        }
       }
       
       return true;
