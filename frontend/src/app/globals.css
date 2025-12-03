@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -1169,6 +1170,35 @@ body {
 }
 .footer-bottom-links a:hover {
   color: white;
+}
+
+/* Dark mode footer */
+.dark .footer {
+  background: #030712;
+  color: #9ca3af;
+  border-top: 1px solid #1f2937;
+}
+.dark .footer-social a {
+  background: #1f2937;
+  color: #9ca3af;
+}
+.dark .footer-column h4 {
+  color: #f9fafb;
+}
+.dark .footer-column a {
+  color: #9ca3af;
+}
+.dark .footer-column a:hover {
+  color: #f9fafb;
+}
+.dark .footer-bottom {
+  border-top-color: #1f2937;
+}
+.dark .footer-bottom-links a {
+  color: #9ca3af;
+}
+.dark .footer-bottom-links a:hover {
+  color: #f9fafb;
 }
 
 /* ============================================

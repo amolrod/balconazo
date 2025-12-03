@@ -19,8 +19,8 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface SpaceMapProps {
-  latitude?: number;
-  longitude?: number;
+  latitude?: number | null;
+  longitude?: number | null;
   title: string;
   address?: string;
   className?: string;
@@ -62,7 +62,7 @@ export default function SpaceMap({
   }
 
   // Show placeholder if no coordinates
-  if (latitude === undefined || longitude === undefined) {
+  if (!latitude || !longitude || latitude === null || longitude === null) {
     return (
       <div 
         className={`bg-muted/50 rounded-xl flex items-center justify-center ${className}`} 

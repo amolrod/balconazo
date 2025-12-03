@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { LogIn, Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
+import { Heart, Calendar, Home, LogOut, Settings, HelpCircle } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { useAuth } from "@/lib/auth";
 
 export default function Header() {
@@ -67,9 +68,10 @@ export default function Header() {
 
           {/* Show login button when not authenticated */}
           {!isLoading && !isAuthenticated && (
-            <Link href="/auth" className="login-button">
-              <LogIn size={18} />
-              <span>Iniciar sesión</span>
+            <Link href="/auth">
+              <InteractiveHoverButton>
+                Iniciar sesión
+              </InteractiveHoverButton>
             </Link>
           )}
 
