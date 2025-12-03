@@ -903,20 +903,21 @@
 .search-submit-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   background: linear-gradient(135deg, #f43f5e, #e11d48);
   color: white;
   border: none;
   border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  padding: 0.5rem;
+  width: 38px;
+  height: 38px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
 }
 
 .search-submit-btn:hover {
-  transform: scale(1.02);
+  transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
 }
 
@@ -1184,10 +1185,14 @@
   }
 
   .filter-toggle-btn,
-  .clear-filters-btn,
-  .search-submit-btn {
+  .clear-filters-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .search-submit-btn {
+    width: 100%;
+    height: 44px;
   }
 
   .results-bar {
